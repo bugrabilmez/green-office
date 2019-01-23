@@ -1,5 +1,6 @@
 body {
   background: url("/background.jpg") no-repeat center center fixed;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
 .contestCard {
@@ -11,4 +12,22 @@ body {
   margin-top: -200px;
   margin-left: -350px;
   position: fixed;
+}
+
+.contestTitle {
+  margin: 4px;
+  padding: 4px 4px 4px 12px;
+  background-color: #f5fcfd;
+}
+
+.contestTime {
+  margin-top: 60px;
+  color: #035463;
+  text-align: center;
+}
+
+.remainingTime {
+  color: #460303;
+  font-size: 72px;
+  font-weight: bold;
 }

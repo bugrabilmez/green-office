@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
         startingDate: {
             type: DataTypes.DATE,
             allowNull: false
+        },
+        isCompleted: {
+            type: DataTypes.BOOLEAN,
         }
     }, options('EntContest'));
 

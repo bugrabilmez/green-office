@@ -8,8 +8,10 @@ import Typography from "@material-ui/core/Typography";
 export default class Root extends Component {
   constructor() {
     super();
+    this.intervalId = 0;
     this.state = {
       contest: {
+        id: 0,
         name: "",
         description: "",
         startingDateString: "",
@@ -20,7 +22,8 @@ export default class Root extends Component {
         timeRemaining: new Date(),
         startingDate: new Date(),
         countDown: false,
-        isTimeUp: false
+        isTimeUp: false,
+        isCompleted: false
       }
     };
   }
@@ -28,63 +31,78 @@ export default class Root extends Component {
   componentWillMount() {
     Service.getContest(contest => {
       this.setState({ contest: contest });
+      Service.getQuestions(contest.id, questions => {
+        console.log(questions);
+      });
     });
   }
 
   componentDidMount() {
-    setInterval(() => {
-      const contestTime = Service.calculateRemaining(
-        this.state.contest.startingDate
-      );
-      this.setState(prevState => ({
-        contest: {
-          ...prevState.contest,
-          ...contestTime
-        }
-      }));
-    }, 1000);
+    if (!this.state.contest.isCompleted) {
+      this.intervalId = setInterval(() => {
+        const contestTime = Service.calculateRemaining(
+          this.state.contest.startingDate
+        );
+        this.setState(prevState => ({
+          contest: {
+            ...prevState.contest,
+            ...contestTime
+          }
+        }));
+      }, 1000);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.contest.isTimeUp) {
+      clearInterval(this.intervalId);
+    }
   }
 
   render() {
-    if (!this.state.contest.isTimeUp && !this.state.contest.countDown) {
-      return (
-        <Card className="contestCard">
-          <CardContent>
-            {/* <Typography variant="h5" component="h2">
-              {this.state.contest.name}
-            </Typography>
-            <Typography color="textSecondary">
-              {this.state.contest.description}
-            </Typography> */}
+    if (!this.state.contest.isCompleted) {
+      if (!this.state.contest.isTimeUp && !this.state.contest.countDown) {
+        return (
+          <Card className="contestCard">
+            <CardContent>
+              <div>
+                <div className="contestTitle">
+                  <h3>{this.state.contest.name}</h3>
+                  <p>{this.state.contest.description}</p>
+                </div>
+                <div className="contestTime">
+                  <h2>Başlangıç:</h2>
+                  <h1>{this.state.contest.startingDateString}</h1>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      } else if (!this.state.contest.isTimeUp && this.state.contest.countDown) {
+        return (
+          <Card className="contestCard">
+            <div>
+              <div className="contestTime">
+                <h2>Yarışma Başlıyor!</h2>
+                <div className="remainingTime">
+                  {this.state.contest.timeRemainingMinutes}:
+                  {this.state.contest.timeRemainingSeconds}
+                </div>
+              </div>
+            </div>
+          </Card>
+        );
+      } else {
+        return (
+          <Card className="contestCard">
             <Typography variant="h5" component="h2" align="center">
-              Başlangıç:
+              Yarışma Başladı.
             </Typography>
-            <Typography variant="h3" component="h2" align="center">
-              {this.state.contest.startingDateString}
-            </Typography>
-          </CardContent>
-        </Card>
-      );
-    } else if (!this.state.contest.isTimeUp && this.state.contest.countDown) {
-      return (
-        <Card className="contestCard">
-          <Typography variant="h5" component="h2" align="center">
-            Yarışma Başlıyor!
-          </Typography>
-          <Typography variant="h3" component="h2" align="center">
-            {this.state.contest.timeRemainingMinutes}:
-            {this.state.contest.timeRemainingSeconds}
-          </Typography>
-        </Card>
-      );
+          </Card>
+        );
+      }
     } else {
-      return (
-        <Card className="contestCard">
-          <Typography variant="h5" component="h2" align="center">
-            Yarışma Başladı.
-          </Typography>
-        </Card>
-      );
+      return null;
     }
   }
 }
