@@ -1,0 +1,14 @@
+body {
+  background: url("/background.jpg") no-repeat center center fixed;
+}
+
+.contestCard {
+  height: 400px;
+  width: 700px;
+  margin: 0 auto;
+  top: 50%;
+  left: 50%;
+  margin-top: -200px;
+  margin-left: -350px;
+  position: fixed;
+}
