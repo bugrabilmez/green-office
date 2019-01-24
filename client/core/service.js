@@ -2,48 +2,77 @@ import axios from "axios";
 import moment from "moment";
 import momentTz from "moment-timezone";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 const instance = axios.create({
   timeout: 2500
 });
 
-const _calculateRemaining = (startingDate) => {
-  const now = momentTz().tz('Europe/Istanbul');
+const _calculateRemaining = startingDate => {
+  const now = momentTz().tz("Europe/Istanbul");
   const state = {};
-  state.timeRemaining = momentTz(startingDate - now).tz('Europe/Istanbul');
-  state.timeRemainingDays = parseInt(state.timeRemaining.format('D')) - 1;
-  state.timeRemainingHours = parseInt(state.timeRemaining.format('H')) - 2;
-  state.timeRemainingMinutes = parseInt(state.timeRemaining.format('m'));
-  state.timeRemainingSeconds = parseInt(state.timeRemaining.format('s'));
-  if (state.timeRemainingHours < 0 || state.timeRemainingDays < 0 || state.timeRemainingMinutes < 0 || state.timeRemainingSeconds < 0) {
+
+  state.timeRemaining = momentTz(startingDate - now).tz("Europe/Istanbul");
+  state.timeRemainingDays = parseInt(state.timeRemaining.format("D")) - 1;
+  state.timeRemainingHours = parseInt(state.timeRemaining.format("H")) - 2;
+  state.timeRemainingMinutes = parseInt(state.timeRemaining.format("mm"));
+  state.timeRemainingSeconds = parseInt(state.timeRemaining.format("ss"));
+
+  if (state.timeRemaining._i < 0) {
     state.isTimeUp = true;
     state.countDown = false;
   }
-  if (state.timeRemainingMinutes < 3 && state.timeRemainingDays === 0 && state.timeRemainingHours === 0) {
+
+  if (
+    state.timeRemainingMinutes < 3 &&
+    state.timeRemainingDays === 0 &&
+    state.timeRemainingHours === 0
+  ) {
     state.countDown = true;
     state.isTimeUp = false;
   }
-  return state;
-}
 
-const _getContest = (callback) => {
+  return state;
+};
+
+const _getContest = callback => {
   instance.get("/getContest").then(response => {
-    const contests = _.sortBy(response.data, ['id']);
+    const contests = _.sortBy(response.data, ["id"]);
     let contest = {
+      id: contests[0].id,
       name: contests[0].name,
-      description: contests[0].description
+      description: contests[0].description,
+      isCompleted: contests[0].isCompleted
     };
-    contest.startingDate = momentTz(contests[0].startingDate).tz('Europe/Istanbul');
+
+    contest.startingDate = momentTz(contests[0].startingDate).tz(
+      "Europe/Istanbul"
+    );
+
     contest = Object.assign(contest, _calculateRemaining(contest.startingDate));
-    contest.startingDateString = contest.startingDate.locale("tr").format("Do MMMM YYYY, H:mm");
+
+    contest.startingDateString = contest.startingDate
+      .locale("tr")
+      .format("Do MMMM YYYY, H:mm");
+
     callback(contest);
   });
 };
 
-
+const _getQuestions = (contestId, callback) => {
+  instance
+    .get("/getQuestions", {
+      params: {
+        contestId
+      }
+    })
+    .then(response => {
+      callback(response);
+    });
+};
 
 module.exports = {
   getContest: _getContest,
-  calculateRemaining: _calculateRemaining
+  calculateRemaining: _calculateRemaining,
+  getQuestions: _getQuestions
 };
