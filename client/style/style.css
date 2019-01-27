@@ -31,3 +31,35 @@ body {
   font-size: 72px;
   font-weight: bold;
 }
+
+.questionDiv {
+  margin: 18px;
+}
+
+.question {
+  font-size: 24px;
+  font-weight: bold;
+  background-color: #f5fcfd;
+  padding: 4px 4px 4px 12px;
+  margin-top: 24px;
+  margin-bottom: 18px;
+}
+
+.secondRemaining {
+  color: #460303;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  padding: 18px;
+}
+
+.answers {
+  text-align: center;
+  margin: 24px;
+}
+
+.answerText {
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: none;
+}

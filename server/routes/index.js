@@ -1,7 +1,7 @@
 const express = require("express");
 const index = express.Router();
 const ormFactory = require("../core/orm/factory").instance();
-const _ = require('lodash');
+const _ = require("lodash");
 
 index.get("/", (req, res) => {
   res.render("index");
@@ -14,15 +14,62 @@ index.get("/getContest", (req, res) => {
 });
 
 index.get("/getQuestions", (req, res) => {
-  ormFactory.find(req.app.locals.db.EntQuestion, { contestId: req.query.contestId }, data => {
-    res.json(data);
-  });
+  ormFactory.find(
+    req.app.locals.db.EntQuestion,
+    { contestId: req.query.contestId },
+    data => {
+      res.json(data);
+    }
+  );
 });
 
 index.get("/getAnswers", (req, res) => {
-  ormFactory.find(req.app.locals.db.EntAnswer, { questionId: req.query.questionId }, data => {
-    res.json(data);
-  });
+  ormFactory.find(
+    req.app.locals.db.EntAnswer,
+    { questionId: req.query.questionId },
+    data => {
+      res.json(data);
+    }
+  );
+});
+
+index.post("/sendAnswer", (req, res) => {
+  ormFactory.create(
+    req.app.locals.db.EntCompetitorAnswer,
+    {
+      identity: req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+      answerId: req.body.answerId,
+      questionId: req.body.questionId
+    },
+    data => {
+      res.json(data);
+    }
+  );
+});
+
+index.get("/getResult", (req, res) => {
+  ormFactory.find(
+    req.app.locals.db.EntAnswer,
+    { questionId: req.query.questionId },
+    answers => {
+      ormFactory.find(
+        req.app.locals.db.EntCompetitorAnswer,
+        { questionId: req.query.questionId },
+        competitorAnswers => {
+          const result = [];
+          answers.forEach(answer => {
+            result.push({
+              id: answer.id,
+              count: competitorAnswers.filter(x => x.answerId === answer.id)
+                .length,
+              isTrue: answer.isTrue
+            });
+          });
+          res.json(result);
+        }
+      );
+    }
+  );
 });
 
 module.exports = index;
