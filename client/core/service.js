@@ -83,9 +83,34 @@ const _getAnswers = (questionId, callback) => {
     });
 };
 
+const _sendAnswer = (answerId, questionId, callback) => {
+  instance
+    .post("/sendAnswer", {
+      answerId,
+      questionId
+    })
+    .then(response => {
+      callback(response);
+    });
+};
+
+const _getResult = (questionId, callback) => {
+  instance
+    .get("/getResult", {
+      params: {
+        questionId
+      }
+    })
+    .then(response => {
+      callback(response);
+    });
+};
+
 module.exports = {
   getContest: _getContest,
   calculateRemaining: _calculateRemaining,
   getQuestions: _getQuestions,
-  getAnswers: _getAnswers
+  getAnswers: _getAnswers,
+  sendAnswer: _sendAnswer,
+  getResult: _getResult
 };
