@@ -71,8 +71,21 @@ const _getQuestions = (contestId, callback) => {
     });
 };
 
+const _getAnswers = (questionId, callback) => {
+  instance
+    .get("/getAnswers", {
+      params: {
+        questionId
+      }
+    })
+    .then(response => {
+      callback(response);
+    });
+};
+
 module.exports = {
   getContest: _getContest,
   calculateRemaining: _calculateRemaining,
-  getQuestions: _getQuestions
+  getQuestions: _getQuestions,
+  getAnswers: _getAnswers
 };

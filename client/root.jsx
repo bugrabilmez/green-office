@@ -4,6 +4,7 @@ import styles from "./style/style.css";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import Contest from './contest';
 
 export default class Root extends Component {
   constructor() {
@@ -31,9 +32,6 @@ export default class Root extends Component {
   componentWillMount() {
     Service.getContest(contest => {
       this.setState({ contest: contest });
-      Service.getQuestions(contest.id, questions => {
-        console.log(questions);
-      });
     });
   }
 
@@ -95,9 +93,8 @@ export default class Root extends Component {
       } else {
         return (
           <Card className="contestCard">
-            <Typography variant="h5" component="h2" align="center">
-              Yarışma Başladı.
-            </Typography>
+            <Contest contest={this.state.contest}>
+            </Contest>
           </Card>
         );
       }
