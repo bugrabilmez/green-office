@@ -14,12 +14,13 @@ index.get("/getContest", (req, res) => {
 });
 
 index.get("/getQuestions", (req, res) => {
-  ormFactory.find(req.app.locals.db.EntQuestion, { contestId: req.query.contestId }, questions => {
-    _.forEach(questions, (q) => {
-      ormFactory.find(req.app.locals.db.EntAnswer, { questionId: q.id }, data => {
-        
-      });
-    });
+  ormFactory.find(req.app.locals.db.EntQuestion, { contestId: req.query.contestId }, data => {
+    res.json(data);
+  });
+});
+
+index.get("/getAnswers", (req, res) => {
+  ormFactory.find(req.app.locals.db.EntAnswer, { questionId: req.query.questionId }, data => {
     res.json(data);
   });
 });
