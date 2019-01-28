@@ -9,6 +9,7 @@ class httpLogging {
         this.requestData = requestData;
         this.responseData = responseData; 
         this.created = created;
+        
     }
 }
 
