@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as Service from "./core/service";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
+import green from '@material-ui/core/colors/green';
 
 const _ = require("lodash");
 
@@ -26,7 +27,8 @@ export default class Contest extends Component {
       questionId: 0,
       isCompleted: false,
       showResult: false,
-      answers: []
+      answers: [],
+      result: []
     };
   }
 
@@ -38,7 +40,8 @@ export default class Contest extends Component {
       second: question.second,
       questionId: question.id,
       isCompleted: false,
-      showResult: false
+      showResult: false,
+      result: []
     };
     this.setState(prevState => ({
       ...prevState,
@@ -73,7 +76,7 @@ export default class Contest extends Component {
   }
 
   _sendAnswer() {
-    if (!this.state.isCompleted) {
+    if (!this.state.isCompleted && !this.state.showResult) {
       Service.sendAnswer(
         this.state.selectedAnswerId,
         this.state.questionId,
@@ -81,17 +84,22 @@ export default class Contest extends Component {
       );
       const state = Object.assign({}, this.state);
       state.isCompleted = true;
+      state.showResult = true;
       this.setState(state);
     }
   }
 
   _getResult() {
-    setTimeout(
-      Service.getResult(this.state.questionId, data => {
-        console.log(data);
-      }),
-      10000
-    );
+    if (this.state.result.length === 0) {
+      setTimeout(
+        Service.getResult(this.state.questionId, data => {
+          const state = Object.assign({}, this.state);
+          state.result = data.data;
+          this.setState(state);
+        }),
+        10000
+      );
+    }
   }
 
   _onAnswerClick(answerId) {
@@ -112,7 +120,7 @@ export default class Contest extends Component {
   componentDidMount() {}
 
   componentDidUpdate(prevState) {
-    if (this.state.second === 0) {
+    if (this.state.second === 0 && prevState !== this.state) {
       this._clearCountDown();
       this._sendAnswer();
       this._getResult();
@@ -120,8 +128,26 @@ export default class Contest extends Component {
   }
 
   _answerButtons() {
+    console.log(this.state);
     if (this.state.answers && this.state.answers.length > 0) {
       return this.state.answers.map(answer => {
+        let color;
+        let textCount;
+        if (answer.id === this.state.selectedAnswerId) {
+          color = "primary";
+        } else {
+          color = "default";
+        }
+       
+        if (this.state.result.length > 0) {
+            let  resultItem =  this.state.result.find(p=>p.id === answer.id);
+            textCount= "("+resultItem.count+")";
+            if(resultItem && resultItem.isTrue && answer.id === this.state.selectedAnswerId){
+              color = "inherit";
+            } else if(resultItem && !resultItem.isTrue && answer.id === this.state.selectedAnswerId) {
+              color = "secondary";
+            }
+          }
         return (
           <div className="answers" key={answer.id}>
             <Button
@@ -129,14 +155,10 @@ export default class Contest extends Component {
               variant="contained"
               fullWidth
               classes={{ label: "answerText" }}
-              color={
-                answer.id === this.state.selectedAnswerId
-                  ? "primary"
-                  : "default"
-              }
+              color={color}
               onClick={this._onAnswerClick.bind(null, answer.id)}
             >
-              {answer.answer}
+              {answer.answer}  {textCount}
             </Button>
           </div>
         );
