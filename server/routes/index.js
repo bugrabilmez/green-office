@@ -28,7 +28,11 @@ index.get("/getAnswers", (req, res) => {
     req.app.locals.db.EntAnswer,
     { questionId: req.query.questionId },
     data => {
-      res.json(data);
+      res.json(
+        data.map(x => {
+          return { id: x.id, answer: x.answer, questionId: x.questionId };
+        })
+      );
     }
   );
 });
