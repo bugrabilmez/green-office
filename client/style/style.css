@@ -63,3 +63,11 @@ body {
   font-weight: bold;
   text-transform: none;
 }
+
+.falseButton { 
+  background-color: #bf2727 !important;
+}
+
+.trueButton {  
+  background-color: #016d0f !important;
+}
