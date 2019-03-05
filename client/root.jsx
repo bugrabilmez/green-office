@@ -3,7 +3,6 @@ import * as Service from "./core/service";
 import styles from "./style/style.css";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
 import Contest from './contest';
 
 export default class Root extends Component {
