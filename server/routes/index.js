@@ -38,6 +38,10 @@ index.get("/getAnswers", (req, res) => {
 });
 
 index.post("/sendAnswer", (req, res) => {
+  var os = require('os');
+var ifaces = os.networkInterfaces();
+console.log(os.hostname()); //kullanici adini almamızı sağlar
+    
   ormFactory.create(
     req.app.locals.db.EntCompetitorAnswer,
     {
