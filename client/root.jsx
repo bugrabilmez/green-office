@@ -23,7 +23,8 @@ export default class Root extends Component {
         startingDate: new Date(),
         countDown: false,
         isTimeUp: false,
-        isCompleted: false
+        isCompleted: false,
+        hasStarted: false
       }
     };
   }
@@ -57,7 +58,7 @@ export default class Root extends Component {
   }
 
   render() {
-    if (!this.state.contest.isCompleted) {
+    if (!this.state.contest.isCompleted && !this.state.contest.hasStarted) {
       if (!this.state.contest.isTimeUp && !this.state.contest.countDown) {
         return (
           <Card className="contestCard">
@@ -99,7 +100,34 @@ export default class Root extends Component {
           </Card>
         );
       }
-    } else {
+    } else if (!this.state.contest.isCompleted && this.state.contest.hasStarted) {
+      return (
+        <Card className="contestCard">
+          <div>
+            <div className="contestTime">
+              <h2>Yarışma Başladı!</h2>
+              <div className="remainingTime">
+                Lütfen sonuçları bekleyiniz.
+              </div>
+            </div>
+          </div>
+        </Card>
+      );
+    } else if (this.state.contest.isCompleted) {
+      return (
+        <Card className="contestCard">
+          <div>
+            <div className="contestTime">
+              <h2>Yarışma Sonuçları:</h2>
+              <div className="remainingTime">
+                Kazananlar:
+              </div>
+            </div>
+          </div>
+        </Card>
+      );
+    }   
+    else {
       return null;
     }
   }
