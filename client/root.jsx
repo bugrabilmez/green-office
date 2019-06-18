@@ -77,6 +77,8 @@ export default class Root extends Component {
           </Card>
         );
       } else if (!this.state.contest.isTimeUp && this.state.contest.countDown) {
+       let seconds=this.state.contest.timeRemainingSeconds < 10 ? "0":"";
+        seconds += this.state.contest.timeRemainingSeconds;
         return (
           <Card className="contestCard">
             <div>
@@ -84,7 +86,7 @@ export default class Root extends Component {
                 <h2>Yarışma Başlıyor!</h2>
                 <div className="remainingTime">
                   {this.state.contest.timeRemainingMinutes}:
-                  {this.state.contest.timeRemainingSeconds}
+                  {seconds}
                 </div>
               </div>
             </div>
