@@ -42,7 +42,8 @@ const _getContest = callback => {
       id: contests[0].id,
       name: contests[0].name,
       description: contests[0].description,
-      isCompleted: contests[0].isCompleted
+      isCompleted: contests[0].isCompleted,
+      hasStarted: false
     };
 
     contest.startingDate = momentTz(contests[0].startingDate).tz(
@@ -50,6 +51,7 @@ const _getContest = callback => {
     );
 
     contest = Object.assign(contest, _calculateRemaining(contest.startingDate));
+    contest.hasStarted = !!contest.isTimeUp;
 
     contest.startingDateString = contest.startingDate
       .locale("tr")

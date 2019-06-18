@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import * as Service from "./core/service";
-import ProgressBar from './contest/progressBar';
-import Answers from './contest/answers';
+import ProgressBar from "./contest/progressBar";
+import Answers from "./contest/answers";
+import Result from "./contest/result";
 
 const _ = require("lodash");
 
@@ -29,7 +30,8 @@ export default class Contest extends Component {
       showResult: false,
       answers: [],
       result: [],
-      incorrectAnswer: false
+      incorrectAnswer: false,
+      isFinished: false
     };
   }
 
@@ -102,13 +104,19 @@ export default class Contest extends Component {
           const state = Object.assign({}, this.state);
           state.result = data.data;
           state.showResult = true;
-          const selected = state.result.find(x => x.id === this.state.selectedAnswerId);
+          const selected = state.result.find(
+            x => x.id === this.state.selectedAnswerId
+          );
           if (!selected || !selected.isTrue) {
             state.incorrectAnswer = true;
           }
+          if (this.state.order === this.questions.length) {
+            console.log("finish");
+            state.isFinished = true;
+          }
           this.setState(state);
         });
-      }, 10000);
+      }, 5000);
     }
   }
 
@@ -124,7 +132,7 @@ export default class Contest extends Component {
         this._clearCountDown();
         this._setQuestion();
       }
-    }   
+    }
   }
 
   _onAnswerClick(answerId) {
@@ -145,7 +153,11 @@ export default class Contest extends Component {
   componentDidMount() {}
 
   componentDidUpdate(prevState) {
-    if (this.state.second === 0 && prevState !== this.state) {
+    if (
+      this.state.second === 0 &&
+      prevState !== this.state &&
+      !this.state.isFinished
+    ) {
       this._clearCountDown();
       this._sendAnswer();
       this._getResult();
@@ -154,13 +166,16 @@ export default class Contest extends Component {
   }
 
   render() {
-    
-    return (
-      <div className="questionDiv">
-        <ProgressBar state={this.state}></ProgressBar>
-        <div className="question">{this.state.question}</div>
-        <Answers state={this.state} onAnswerClick={this._onAnswerClick}></Answers>
-      </div>
-    );
+    if (!this.state.isFinished) {
+      return (
+        <div className="questionDiv">
+          <ProgressBar state={this.state} />
+          <div className="question">{this.state.question}</div>
+          <Answers state={this.state} onAnswerClick={this._onAnswerClick} />
+        </div>
+      );
+    } else {
+      return <Result />;
+    }
   }
 }
