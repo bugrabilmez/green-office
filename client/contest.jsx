@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import * as Service from "./core/service";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Button from "@material-ui/core/Button";
-import green from '@material-ui/core/colors/green';
+import ProgressBar from "./contest/progressBar";
+import Answers from "./contest/answers";
+import Result from "./contest/result";
 
 const _ = require("lodash");
 
@@ -13,10 +13,10 @@ export default class Contest extends Component {
     this._setAnswers = this._setAnswers.bind(this);
     this._startCountDown = this._startCountDown.bind(this);
     this._clearCountDown = this._clearCountDown.bind(this);
-    this._answerButtons = this._answerButtons.bind(this);
     this._onAnswerClick = this._onAnswerClick.bind(this);
     this._sendAnswer = this._sendAnswer.bind(this);
     this._getResult = this._getResult.bind(this);
+    this._nextQuestion = this._nextQuestion.bind(this);
     this.questions = {};
     this.intervalId = 0;
     this.state = {
@@ -24,11 +24,14 @@ export default class Contest extends Component {
       selectedAnswerId: 0,
       question: "",
       second: 10,
+      nextQuestionSecond: 10,
       questionId: 0,
       isCompleted: false,
       showResult: false,
       answers: [],
-      result: []
+      result: [],
+      incorrectAnswer: false,
+      isFinished: false
     };
   }
 
@@ -37,21 +40,23 @@ export default class Contest extends Component {
     const state = {
       order: this.state.order + 1,
       question: question.question,
+      selectedAnswerId: 0,
       second: question.second,
       questionId: question.id,
       isCompleted: false,
       showResult: false,
+      nextQuestionSecond: 5,
       result: []
     };
     this.setState(prevState => ({
       ...prevState,
       ...state
     }));
-    this._setAnswers();
+    this._setAnswers(question.id);
   }
 
-  _setAnswers() {
-    Service.getAnswers(this.state.questionId, data => {
+  _setAnswers(questionId) {
+    Service.getAnswers(questionId, data => {
       const state = {
         answers: data.data
       };
@@ -84,26 +89,54 @@ export default class Contest extends Component {
       );
       const state = Object.assign({}, this.state);
       state.isCompleted = true;
-      state.showResult = true;
       this.setState(state);
     }
   }
 
   _getResult() {
-    if (this.state.result.length === 0) {
-      setTimeout(
+    if (
+      this.state.result.length === 0 &&
+      this.state.isCompleted &&
+      !this.state.showResult
+    ) {
+      setTimeout(() => {
         Service.getResult(this.state.questionId, data => {
           const state = Object.assign({}, this.state);
           state.result = data.data;
+          state.showResult = true;
+          const selected = state.result.find(
+            x => x.id === this.state.selectedAnswerId
+          );
+          if (!selected || !selected.isTrue) {
+            state.incorrectAnswer = true;
+          }
+          if (this.state.order === this.questions.length) {
+            console.log("finish");
+            state.isFinished = true;
+          }
           this.setState(state);
-        }),
-        10000
-      );
+        });
+      }, 5000);
+    }
+  }
+
+  _nextQuestion() {
+    if (this.state.showResult) {
+      this.intervalId = setInterval(() => {
+        const state = Object.assign({}, this.state);
+        state.nextQuestionSecond = state.nextQuestionSecond - 1;
+        this.setState(state);
+      }, 1000);
+
+      if (this.state.nextQuestionSecond === 0) {
+        this._clearCountDown();
+        this._setQuestion();
+      }
     }
   }
 
   _onAnswerClick(answerId) {
-    if (this.state.second > 0) {
+    if (this.state.second > 0 && !this.state.incorrectAnswer) {
       const state = Object.assign({}, this.state);
       state.selectedAnswerId = answerId;
       this.setState(state);
@@ -120,71 +153,29 @@ export default class Contest extends Component {
   componentDidMount() {}
 
   componentDidUpdate(prevState) {
-    if (this.state.second === 0 && prevState !== this.state) {
+    if (
+      this.state.second === 0 &&
+      prevState !== this.state &&
+      !this.state.isFinished
+    ) {
       this._clearCountDown();
       this._sendAnswer();
       this._getResult();
+      this._nextQuestion();
     }
   }
 
-  _answerButtons() {
-    console.log(this.state);
-    if (this.state.answers && this.state.answers.length > 0) {
-      return this.state.answers.map(answer => {
-        let color;
-        let textCount;
-        if (answer.id === this.state.selectedAnswerId) {
-          color = "primary";
-        } else {
-          color = "default";
-        }
-       
-        if (this.state.result.length > 0) {
-            let  resultItem =  this.state.result.find(p=>p.id === answer.id);
-            textCount= "("+resultItem.count+")";
-            if(resultItem && resultItem.isTrue && answer.id === this.state.selectedAnswerId){
-              color = "inherit";
-            } else if(resultItem && !resultItem.isTrue && answer.id === this.state.selectedAnswerId) {
-              color = "secondary";
-            }
-          }
-        return (
-          <div className="answers" key={answer.id}>
-            <Button
-              key={answer.id}
-              variant="contained"
-              fullWidth
-              classes={{ label: "answerText" }}
-              color={color}
-              onClick={this._onAnswerClick.bind(null, answer.id)}
-            >
-              {answer.answer}  {textCount}
-            </Button>
-          </div>
-        );
-      });
-    } else return null;
-  }
-
   render() {
-    const answers = this._answerButtons();
-    const progressText = this.state.isCompleted
-      ? "Cevap gönderiliyor."
-      : "Kalan Süre: " + this.state.second;
-
-    return (
-      <div className="questionDiv">
-        <div className="secondRemaining">{progressText}</div>
-        <div>
-          <LinearProgress
-            variant="determinate"
-            color="secondary"
-            value={(10 - this.state.second) * 10}
-          />
+    if (!this.state.isFinished) {
+      return (
+        <div className="questionDiv">
+          <ProgressBar state={this.state} />
+          <div className="question">{this.state.question}</div>
+          <Answers state={this.state} onAnswerClick={this._onAnswerClick} />
         </div>
-        <div className="question">{this.state.question}</div>
-        <div>{answers}</div>
-      </div>
-    );
+      );
+    } else {
+      return <Result />;
+    }
   }
 }
