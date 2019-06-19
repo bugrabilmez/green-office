@@ -14,7 +14,7 @@ export default class ProgressBar extends Component {
     } else if (this.props.state.isCompleted && !this.props.state.showResult) {
       progressText = "Cevap Gönderiliyor...";
     } else if (this.props.state.isCompleted && this.props.state.showResult) {
-      progressText = "Sonuçlar, Sonraki soru hazırlanıyor. Kalan Süre: " + this.props.state.nextQuestionSecond;
+      progressText = "Sonuçlar. Sonraki soru hazırlanıyor. Kalan Süre: " + this.props.state.nextQuestionSecond;
     }
 
     return (
