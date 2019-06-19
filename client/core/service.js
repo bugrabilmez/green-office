@@ -89,7 +89,8 @@ const _sendAnswer = (answerId, questionId, callback) => {
   instance
     .post("/sendAnswer", {
       answerId,
-      questionId
+      questionId,
+      username: localStorage.getItem("username")
     })
     .then(response => {
       callback(response);

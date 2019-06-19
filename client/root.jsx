@@ -4,6 +4,7 @@ import styles from "./style/style.css";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Contest from './contest';
+import User from './userName';
 
 export default class Root extends Component {
   constructor() {
@@ -68,10 +69,11 @@ export default class Root extends Component {
                   <h3>{this.state.contest.name}</h3>
                   <p>{this.state.contest.description}</p>
                 </div>
+                <User />
                 <div className="contestTime">
                   <h2>Başlangıç:</h2>
-                  <h1>{this.state.contest.startingDateString}</h1>
-                </div>
+                  <h1>{this.state.contest.startingDateString}</h1>                  
+                </div>                
               </div>
             </CardContent>
           </Card>
@@ -84,6 +86,7 @@ export default class Root extends Component {
             <div>
               <div className="contestTime">
                 <h2>Yarışma Başlıyor!</h2>
+                <User />
                 <div className="remainingTime">
                   {this.state.contest.timeRemainingMinutes}:
                   {seconds}
