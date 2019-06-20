@@ -63,4 +63,4 @@ typings/
 # local history
 .history
 
-db/
+db/database.sqlite

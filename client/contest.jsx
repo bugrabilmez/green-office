@@ -3,6 +3,7 @@ import * as Service from "./core/service";
 import ProgressBar from "./contest/progressBar";
 import Answers from "./contest/answers";
 import Result from "./contest/result";
+import * as localStorage from './core/localStorage';
 
 const _ = require("lodash");
 
@@ -146,7 +147,7 @@ export default class Contest extends Component {
   componentWillMount() {
     Service.getQuestions(this.props.contest.id, questions => {
       this.questions = questions.data;
-      this._setQuestion();
+      this._setQuestion();      
     });
   }
 

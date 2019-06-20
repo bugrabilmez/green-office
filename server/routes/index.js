@@ -38,14 +38,11 @@ index.get("/getAnswers", (req, res) => {
 });
 
 index.post("/sendAnswer", (req, res) => {
-  var os = require('os');
-var ifaces = os.networkInterfaces();
-console.log(os.hostname()); //kullanici adini almamızı sağlar
-    
   ormFactory.create(
     req.app.locals.db.EntCompetitorAnswer,
     {
-      identity: req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+      identity: req.body.username,
+      ipAddress: req.headers["x-forwarded-for"] || req.connection.remoteAddress,
       answerId: req.body.answerId,
       questionId: req.body.questionId
     },
