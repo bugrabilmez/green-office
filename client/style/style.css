@@ -77,12 +77,13 @@ body {
   display: 'flex';
   align-items: 'center';
   width: 400;
+  margin-left: 5px;
 }
 
 .usernameInput {
   margin-left: 8;
   flex: 1;
-  padding: 2px;
+  padding: 6px;
 }
 
 .divider {
@@ -93,4 +94,5 @@ body {
 
 .usernameButton{
 float:right;
+padding-top:2px;
 }

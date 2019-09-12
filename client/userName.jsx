@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import * as localStorage from "./core/localStorage";
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import DirectionsIcon from '@material-ui/icons/Directions';
-import Button from '@material-ui/core/Button';
+import CreateIcon from '@material-ui/icons/Create';
+import SaveIcon from '@material-ui/icons/Save';
+import { InputLabel , InputBase, IconButton, Paper} from '@material-ui/core';
 
 export default class Root extends Component {
   constructor() {
@@ -41,6 +37,9 @@ export default class Root extends Component {
   }
 
   render() {
+
+    const button = this.state.buttonName === "Düzenle" ? <CreateIcon /> : <SaveIcon />;
+
     return (
       <Paper className="usernamePaper">
         <InputBase
@@ -51,11 +50,9 @@ export default class Root extends Component {
           inputProps={{ "aria-label": "Search Google Maps" }}
           disabled={this.state.isDisabled} 
         />
-        <Button variant="contained" color="primary" className="usernameButton"  onClick={() => { this.login(); }}>
-        {this.state.buttonName}
-        <DirectionsIcon/>
-      </Button>
-         <Divider className="divider" />
+          <IconButton aria-label="delete"  className="usernameButton" onClick={() => { this.login(); }}>
+              {button}
+         </IconButton>
          </Paper>
     );
   }
