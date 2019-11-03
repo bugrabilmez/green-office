@@ -1,10 +1,11 @@
-import React, { Component } from "react";
-import * as Service from "./core/service";
-import styles from "./style/style.css";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+import React, { Component } from 'react';
+import * as Service from './core/service';
+import styles from './style/style.css';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Contest from './contest';
 import User from './userName';
+import Result from './contest/result';
 
 export default class Root extends Component {
   constructor() {
@@ -13,9 +14,9 @@ export default class Root extends Component {
     this.state = {
       contest: {
         id: 0,
-        name: "",
-        description: "",
-        startingDateString: "",
+        name: '',
+        description: '',
+        startingDateString: '',
         timeRemainingDays: 0,
         timeRemainingHours: 0,
         timeRemainingMinutes: 0,
@@ -39,9 +40,7 @@ export default class Root extends Component {
   componentDidMount() {
     if (!this.state.contest.isCompleted) {
       this.intervalId = setInterval(() => {
-        const contestTime = Service.calculateRemaining(
-          this.state.contest.startingDate
-        );
+        const contestTime = Service.calculateRemaining(this.state.contest.startingDate);
         this.setState(prevState => ({
           contest: {
             ...prevState.contest,
@@ -62,34 +61,35 @@ export default class Root extends Component {
     if (!this.state.contest.isCompleted && !this.state.contest.hasStarted) {
       if (!this.state.contest.isTimeUp && !this.state.contest.countDown) {
         return (
-          <Card className="contestCard">
+          <Card className='contestCard'>
             <CardContent>
               <div>
-                <div className="contestTitle">
+                <div className='contestTitle'>
                   <h3>{this.state.contest.name}</h3>
                   <p>{this.state.contest.description}</p>
                 </div>
                 <User />
-                <div className="contestTime">
+                <div className='contestTime'>
                   <h2>Başlangıç:</h2>
-                  <h1>{this.state.contest.startingDateString}</h1>                  
-                </div>                
+                  <h1>{this.state.contest.startingDateString}</h1>
+                </div>
               </div>
             </CardContent>
           </Card>
         );
       } else if (!this.state.contest.isTimeUp && this.state.contest.countDown) {
-       let seconds=this.state.contest.timeRemainingSeconds < 10 ? "0":"";
+        let minutes = this.state.contest.timeRemainingMinutes < 10 ? '0' : '';
+        minutes += this.state.contest.timeRemainingMinutes;
+        let seconds = this.state.contest.timeRemainingSeconds < 10 ? '0' : '';
         seconds += this.state.contest.timeRemainingSeconds;
         return (
-          <Card className="contestCard">
+          <Card className='contestCard'>
             <div>
-              <div className="contestTime">
+              <div className='contestTime'>
                 <h2>Yarışma Başlıyor!</h2>
                 <User />
-                <div className="remainingTime">
-                  {this.state.contest.timeRemainingMinutes}:
-                  {seconds}
+                <div className='remainingTime'>
+                  {minutes}:{seconds}
                 </div>
               </div>
             </div>
@@ -97,40 +97,29 @@ export default class Root extends Component {
         );
       } else {
         return (
-          <Card className="contestCard">
-            <Contest contest={this.state.contest}>
-            </Contest>
+          <Card className='contestCard'>
+            <Contest contest={this.state.contest}></Contest>
           </Card>
         );
       }
     } else if (!this.state.contest.isCompleted && this.state.contest.hasStarted) {
       return (
-        <Card className="contestCard">
+        <Card className='contestCard'>
           <div>
-            <div className="contestTime">
+            <div className='contestTime'>
               <h2>Yarışma Başladı!</h2>
-              <div className="remainingTime">
-                Lütfen sonuçları bekleyiniz.
-              </div>
+              <div className='remainingTime'>Lütfen sonuçları bekleyiniz.</div>
             </div>
           </div>
         </Card>
       );
     } else if (this.state.contest.isCompleted) {
       return (
-        <Card className="contestCard">
-          <div>
-            <div className="contestTime">
-              <h2>Yarışma Sonuçları:</h2>
-              <div className="remainingTime">
-                Kazananlar:
-              </div>
-            </div>
-          </div>
+        <Card className='contestCard'>
+          <Result contestId={this.state.contest.id} />
         </Card>
       );
-    }   
-    else {
+    } else {
       return null;
     }
   }
