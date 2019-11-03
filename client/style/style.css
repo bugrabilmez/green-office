@@ -73,19 +73,26 @@ body {
 }
 
 .usernamePaper {
-  padding: '2px 4px';
+  padding: '5px 4px';
   display: 'flex';
   align-items: 'center';
   width: 400;
+  margin-left: 5px;
 }
 
 .usernameInput {
   margin-left: 8;
   flex: 1;
+  padding: 6px;
 }
 
 .divider {
   width: 1;
   height: 28;
   margin: 4;
+}
+
+.usernameButton{
+float:right;
+padding-top:2px;
 }
