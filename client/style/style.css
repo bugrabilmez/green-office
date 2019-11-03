@@ -64,11 +64,11 @@ body {
   text-transform: none;
 }
 
-.falseButton { 
+.falseButton {
   background-color: #bf2727 !important;
 }
 
-.trueButton {  
+.trueButton {
   background-color: #016d0f !important;
 }
 
@@ -92,7 +92,7 @@ body {
   margin: 4;
 }
 
-.usernameButton{
-float:right;
-padding-top:2px;
+.usernameButton {
+  float: right;
+  padding-top: 2px;
 }

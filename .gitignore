@@ -63,4 +63,6 @@ typings/
 # local history
 .history
 
+package-lock.json
+
 db/database.sqlite

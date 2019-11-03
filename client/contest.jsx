@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import * as Service from "./core/service";
-import ProgressBar from "./contest/progressBar";
-import Answers from "./contest/answers";
-import Result from "./contest/result";
+import React, { Component } from 'react';
+import * as Service from './core/service';
+import ProgressBar from './contest/progressBar';
+import Answers from './contest/answers';
+import Result from './contest/result';
 import * as localStorage from './core/localStorage';
 
-const _ = require("lodash");
+const _ = require('lodash');
 
 export default class Contest extends Component {
   constructor() {
@@ -23,7 +23,7 @@ export default class Contest extends Component {
     this.state = {
       order: 0,
       selectedAnswerId: 0,
-      question: "",
+      question: '',
       second: 10,
       nextQuestionSecond: 10,
       questionId: 0,
@@ -83,11 +83,7 @@ export default class Contest extends Component {
 
   _sendAnswer() {
     if (!this.state.isCompleted && !this.state.showResult) {
-      Service.sendAnswer(
-        this.state.selectedAnswerId,
-        this.state.questionId,
-        data => {}
-      );
+      Service.sendAnswer(this.state.selectedAnswerId, this.state.questionId, data => {});
       const state = Object.assign({}, this.state);
       state.isCompleted = true;
       this.setState(state);
@@ -95,24 +91,17 @@ export default class Contest extends Component {
   }
 
   _getResult() {
-    if (
-      this.state.result.length === 0 &&
-      this.state.isCompleted &&
-      !this.state.showResult
-    ) {
+    if (this.state.result.length === 0 && this.state.isCompleted && !this.state.showResult) {
       setTimeout(() => {
         Service.getResult(this.state.questionId, data => {
           const state = Object.assign({}, this.state);
           state.result = data.data;
           state.showResult = true;
-          const selected = state.result.find(
-            x => x.id === this.state.selectedAnswerId
-          );
+          const selected = state.result.find(x => x.id === this.state.selectedAnswerId);
           if (!selected || !selected.isTrue) {
             state.incorrectAnswer = true;
           }
           if (this.state.order === this.questions.length) {
-            console.log("finish");
             state.isFinished = true;
           }
           this.setState(state);
@@ -147,18 +136,14 @@ export default class Contest extends Component {
   componentWillMount() {
     Service.getQuestions(this.props.contest.id, questions => {
       this.questions = questions.data;
-      this._setQuestion();      
+      this._setQuestion();
     });
   }
 
   componentDidMount() {}
 
   componentDidUpdate(prevState) {
-    if (
-      this.state.second === 0 &&
-      prevState !== this.state &&
-      !this.state.isFinished
-    ) {
+    if (this.state.second === 0 && prevState !== this.state && !this.state.isFinished) {
       this._clearCountDown();
       this._sendAnswer();
       this._getResult();
@@ -169,14 +154,14 @@ export default class Contest extends Component {
   render() {
     if (!this.state.isFinished) {
       return (
-        <div className="questionDiv">
+        <div className='questionDiv'>
           <ProgressBar state={this.state} />
-          <div className="question">{this.state.question}</div>
+          <div className='question'>{this.state.question}</div>
           <Answers state={this.state} onAnswerClick={this._onAnswerClick} />
         </div>
       );
     } else {
-      return <Result />;
+      return <Result contestId={this.props.contest.id} />;
     }
   }
 }
