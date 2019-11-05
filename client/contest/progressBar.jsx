@@ -19,6 +19,7 @@ export default class ProgressBar extends Component {
 
     return (
       <Fragment>
+        {this.props.state.incorrectAnswer ? <div className="secondRemaining">Yarışmadan elendiniz!</div> : null}
         <div className="secondRemaining">{progressText}</div>
         <div>
           <LinearProgress
