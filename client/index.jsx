@@ -5,7 +5,11 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import "babel-polyfill";
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  }
+});
 
 function App() {
     return (

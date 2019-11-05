@@ -67,12 +67,12 @@ export default class Root extends Component {
                 <div className='contestTitle'>
                   <h3>{this.state.contest.name}</h3>
                   <p>{this.state.contest.description}</p>
-                </div>
-                <User />
+                </div>                
                 <div className='contestTime'>
                   <h2>Başlangıç:</h2>
                   <h1>{this.state.contest.startingDateString}</h1>
                 </div>
+                <User />
               </div>
             </CardContent>
           </Card>
@@ -86,11 +86,11 @@ export default class Root extends Component {
           <Card className='contestCard'>
             <div>
               <div className='contestTime'>
-                <h2>Yarışma Başlıyor!</h2>
-                <User />
+                <h2>Yarışma Başlıyor!</h2>                
                 <div className='remainingTime'>
                   {minutes}:{seconds}
                 </div>
+                <User />
               </div>
             </div>
           </Card>
