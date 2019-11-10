@@ -18,7 +18,7 @@ export default class Contest extends Component {
     this._sendAnswer = this._sendAnswer.bind(this);
     this._getResult = this._getResult.bind(this);
     this._nextQuestion = this._nextQuestion.bind(this);
-    this.questions = {};
+    this.questions = [];
     this.intervalId = 0;
     this.state = {
       order: 0,
@@ -155,7 +155,7 @@ export default class Contest extends Component {
     if (!this.state.isFinished) {
       return (
         <div className='questionDiv'>
-          <ProgressBar state={this.state} />
+          <ProgressBar state={this.state} questionsLength={this.questions.length}/>
           <div className='question'>{this.state.question}</div>
           <Answers state={this.state} onAnswerClick={this._onAnswerClick} />
         </div>

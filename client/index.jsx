@@ -11,6 +11,14 @@ const theme = createMuiTheme({
   }
 });
 
+const WebFont = require('webfontloader');
+
+  WebFont.load({
+    google: {
+      families: ['Roboto']
+    }
+  });
+
 function App() {
     return (
       <MuiThemeProvider theme={theme}>

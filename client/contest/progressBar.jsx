@@ -1,34 +1,41 @@
-import React, { Component, Fragment } from "react";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import React, { Component, Fragment } from 'react';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 export default class ProgressBar extends Component {
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  render() {
-    let progressText;
+	render() {
+		let progressText;
+    // if (this.props.state.second === 4){
+    //   debugger;
+    // }
 
-    if (!this.props.state.isCompleted && !this.props.state.showResult) {
-      progressText = "Kalan Süre: " + this.props.state.second;
-    } else if (this.props.state.isCompleted && !this.props.state.showResult) {
-      progressText = "Cevap Gönderiliyor...";
-    } else if (this.props.state.isCompleted && this.props.state.showResult) {
-      progressText = "Sonuçlar. Sonraki soru hazırlanıyor. Kalan Süre: " + this.props.state.nextQuestionSecond;
-    }
+		if (!this.props.state.isCompleted && !this.props.state.showResult) {
+			progressText = 'Kalan Süre: ' + this.props.state.second;
+		} else if (this.props.state.isCompleted && !this.props.state.showResult) {
+			progressText = 'Cevap Gönderiliyor...';
+		}
 
-    return (
-      <Fragment>
-        {this.props.state.incorrectAnswer ? <div className="secondRemaining">Yarışmadan elendiniz!</div> : null}
-        <div className="secondRemaining">{progressText}</div>
-        <div>
-          <LinearProgress
-            variant="determinate"
-            color="secondary"
-            value={(10 - this.props.state.second) * 10}
-          />
-        </div>
-      </Fragment>
-    );
-  }
+		if (this.props.state.isCompleted && this.props.state.showResult) {
+			return (
+				<div className="flexContainer">
+					<div className="progressBarText">Sonuçlar. Sonraki soru hazırlanıyor. Kalan Süre: {this.props.state.nextQuestionSecond}</div>
+				</div>
+			);
+		} else {
+			return (
+				<div className="flexContainer">
+					<div className="progressBarText">{progressText}</div>
+					<div className="progressBarDiv">
+						<div className="progressBarTimeDiv" style={{ width: (10 - this.props.state.second) * 30 }}></div>
+					</div>
+					<div className="progressBarText">
+						Soru: {this.props.state.order}/{this.props.questionsLength}
+					</div>
+				</div>
+			);
+		}
+	}
 }
