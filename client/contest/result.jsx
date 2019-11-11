@@ -19,27 +19,26 @@ export default class Result extends Component {
   }
 
   render() {
-    const winners = this.state.winners.map((winner, i) => {
+    let mainText = this.state.winners.map((winner, i) => {
       return <p key={i}>{winner}</p>;
     });
+
     if (!this.state.isCalculated) {
-      return (
-        <div>
-          <div className='contestTime'>
-            <h2>YARIŞMA TAMAMLANDI!</h2>
-            <div className='remainingTime'>Kazanan listesi oluşturuluyor...</div>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <div className='contestTime'>
-            <h2>YARIŞMA TAMAMLANDI! KAZANANLAR:</h2>
-            <div className='remainingTime'>{winners}</div>
-          </div>
-        </div>
-      );
+      mainText = 'Kazanan listesi oluşturuluyor...';
+    } else if (this.state.isCalculated && (!this.state.winners || (this.state.winners && this.state.winners.length === 0))) {
+      mainText = 'Maalesef kazanan çıkmadı!'
     }
+
+    return (
+      <div className="resultMain">
+        <div className="flexContainer" style={{ height: '100%' }}>
+          <div className="resultHalfDiv resultItems">
+            <div className="contestCompleted"></div>
+            <div className="resultMainText">{mainText}</div>
+          </div>
+          <div className="resultHalfDiv resultMadal"></div>
+        </div>
+      </div>
+    );
   }
 }

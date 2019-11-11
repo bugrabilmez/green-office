@@ -1,8 +1,9 @@
 body {
 	background: url('/background_1.png') no-repeat;
-  background-size: cover;
-  font-family: 'Roboto';
+	background-size: cover;
+	font-family: 'Roboto';
 	font-size: 14px;
+	margin: 0 !important;
 }
 
 .contestCard {
@@ -135,17 +136,19 @@ body {
 	width: 512px;
 	height: 72px;
 	text-align: left;
-  padding-left: 24px;
-  cursor: pointer;
+	padding-left: 24px;
+	cursor: pointer;
 }
 
-.answerButton.hover, .answerButton:hover {
-  background-color: #e4e4e4;
+.answerButton.hover,
+.answerButton:hover {
+	background-color: #e4e4e4;
 }
 
-.answerButton.focus, .answerButton:focus {
-  outline: 0;
-  box-shadow: none!important;
+.answerButton.focus,
+.answerButton:focus {
+	outline: 0;
+	box-shadow: none !important;
 }
 
 .selectedAnswer {
@@ -198,4 +201,54 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.resultMain {
+	background: url('/resultBackground.jpg') no-repeat;
+	background-size: cover;
+	width: 100%;
+	height: 100%;
+}
+
+.resultHalfDiv {
+	width: 50%;
+	height: 100%;
+}
+
+.resultMadal {
+	background: url('/winMadal.png') bottom no-repeat;
+	background-size: 50%;
+}
+
+.resultItems {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.contestCompleted {
+	width: 641px;
+	height: 161px;
+	background: url('/contestCompleted.png') bottom no-repeat;
+}
+
+.resultMainText {
+	font-size: 48px;
+	font-weight: bold;
+	color: #fefefe;
+}
+
+.incorrectAnswer {
+	height: 100%;
+	font-size: 32px;
+	color: #D80000;
+	font-weight: bold;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    padding-left: 300px;
+    justify-content: center;
+	background: url('/incorrectAnswer.png') bottom no-repeat;
+	background-size: contain;
 }

@@ -83,7 +83,7 @@ export default class Contest extends Component {
 
   _sendAnswer() {
     if (!this.state.isCompleted && !this.state.showResult) {
-      Service.sendAnswer(this.state.selectedAnswerId, this.state.questionId, data => {});
+      Service.sendAnswer(this.state.selectedAnswerId, this.state.questionId, data => { });
       const state = Object.assign({}, this.state);
       state.isCompleted = true;
       this.setState(state);
@@ -103,6 +103,7 @@ export default class Contest extends Component {
           }
           if (this.state.order === this.questions.length) {
             state.isFinished = true;
+            this.props.finishingContest();
           }
           this.setState(state);
         });
@@ -140,7 +141,7 @@ export default class Contest extends Component {
     });
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   componentDidUpdate(prevState) {
     if (this.state.second === 0 && prevState !== this.state && !this.state.isFinished) {
@@ -152,16 +153,23 @@ export default class Contest extends Component {
   }
 
   render() {
-    if (!this.state.isFinished) {
+    if (!this.state.isFinished && !this.state.incorrectAnswer) {
       return (
         <div className='questionDiv'>
-          <ProgressBar state={this.state} questionsLength={this.questions.length}/>
+          <ProgressBar state={this.state} questionsLength={this.questions.length} />
           <div className='question'>{this.state.question}</div>
           <Answers state={this.state} onAnswerClick={this._onAnswerClick} />
         </div>
       );
-    } else {
-      return <Result contestId={this.props.contest.id} />;
     }
+    else if (!this.state.isFinished && this.state.incorrectAnswer) {
+      return (
+        <div className='incorrectAnswer'>
+          ÜZGÜNÜM,<br />
+          KAYBETTİNİZ!
+        </div>
+      );
+    }
+    else return null;
   }
 }

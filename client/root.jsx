@@ -29,6 +29,8 @@ export default class Root extends Component {
 				hasStarted: false
 			}
 		};
+
+		this.finishingContest = this.finishingContest.bind(this);
 	}
 
 	componentWillMount() {
@@ -55,6 +57,18 @@ export default class Root extends Component {
 		if (this.state.contest.isTimeUp) {
 			clearInterval(this.intervalId);
 		}
+	}
+
+	finishingContest() {
+		const state = {
+			isCompleted: true
+		};
+		this.setState(prevState => ({
+			contest: {
+				...prevState.contest,
+				...state
+			}
+		}));
 	}
 
 	render() {
@@ -98,7 +112,7 @@ export default class Root extends Component {
 			} else {
 				return (
 					<Card className="contestCard">
-						<Contest contest={this.state.contest}></Contest>
+						<Contest contest={this.state.contest} finishingContest={this.finishingContest}></Contest>
 					</Card>
 				);
 			}
@@ -116,11 +130,7 @@ export default class Root extends Component {
 				</Card>
 			);
 		} else if (this.state.contest.isCompleted) {
-			return (
-				<Card className="contestCard">
-					<Result contestId={this.state.contest.id} />
-				</Card>
-			);
+			return <Result contestId={this.state.contest.id} />;
 		} else {
 			return null;
 		}
