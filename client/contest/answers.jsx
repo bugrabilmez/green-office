@@ -31,8 +31,8 @@ export default class Answers extends Component {
 				return (
 					<div className="answers" key={answer.id}>
 						<button
-              key={answer.id}
-              className={`answerButton ${selectedClass} ${colorStyle}`}
+							key={answer.id}
+							className={`answerButton ${selectedClass} ${colorStyle}`}
 							onClick={this.props.onAnswerClick.bind(null, answer.id)}
 						>
 							{answer.answer} {textCount}
