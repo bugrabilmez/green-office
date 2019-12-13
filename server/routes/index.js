@@ -2,6 +2,7 @@ const express = require('express');
 const index = express.Router();
 const ormFactory = require('../core/orm/factory').instance();
 const _ = require('lodash');
+const moment = require('moment');
 
 index.get('/', (req, res) => {
   res.render('index');
@@ -10,6 +11,21 @@ index.get('/', (req, res) => {
 index.get('/getContest', (req, res) => {
   ormFactory.getAll(req.app.locals.db.EntContest, data => {
     res.json(data);
+  });
+});
+
+index.get('/reset', (req, res) => {
+  ormFactory.find(req.app.locals.db.EntContest, { id: 1 }, contest => {
+    contest[0].isCompleted = false;
+    contest[0].startingDate = moment().add(2, 'm');
+    contest[0].save().then(result => {
+      req.app.locals.db.EntCompetitorAnswer.destroy({
+        where: {},
+        truncate: true
+      }).then(result => {
+        res.json({ result: 'reset test contest' });
+      });
+    });
   });
 });
 
