@@ -17,7 +17,7 @@ index.get('/getContest', (req, res) => {
 index.get('/reset', (req, res) => {
   ormFactory.find(req.app.locals.db.EntContest, { id: 1 }, contest => {
     contest[0].isCompleted = false;
-    contest[0].startingDate = moment().add(2, 'm');
+    contest[0].startingDate = moment().add(45, 's');
     contest[0].save().then(result => {
       req.app.locals.db.EntCompetitorAnswer.destroy({
         where: {},
@@ -68,7 +68,8 @@ index.get('/getResult', (req, res) => {
         result.push({
           id: answer.id,
           count: competitorAnswers.filter(x => x.answerId === answer.id).length,
-          isTrue: answer.isTrue
+          isTrue: answer.isTrue,
+          answerInfo: answer.answerInfo
         });
       });
       res.json(result);
