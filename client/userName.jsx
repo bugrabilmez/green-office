@@ -18,8 +18,8 @@ export default class Root extends Component {
 			username: '',
 			buttonName: 'save'
 		};
-    this.handleChange = this.handleChange.bind(this);
-    this.login = this.login.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.login = this.login.bind(this);
 	}
 
 	handleChange(e) {
@@ -27,8 +27,8 @@ export default class Root extends Component {
 			username: e.target.value,
 			isDisabled: false,
 			buttonName: 'save'
-    });
-    localStorage.setItem('username', e.target.value);
+		});
+		localStorage.setItem('username', e.target.value);
 	}
 
 	componentWillMount() {
@@ -36,6 +36,16 @@ export default class Root extends Component {
 		if (username) {
 			this.setState({
 				username: username,
+				isDisabled: true,
+				buttonName: 'edit'
+			});
+		}
+		else {
+			const randInteger = Math.floor(Math.random() * (99999 - 1000 + 1)) + 1000;
+			const randUserName = `Misafir${randInteger.toString()}`
+			localStorage.setItem('username', randUserName);
+			this.setState({
+				username: randUserName,
 				isDisabled: true,
 				buttonName: 'edit'
 			});
@@ -55,30 +65,30 @@ export default class Root extends Component {
 		const button = this.state.buttonName === 'edit' ? <CreateIcon /> : <SaveIcon />;
 
 		return (
-			<div className="flexContainer" style={{marginTop: 20}}>
-        <FormControl fullWidth variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Kullanıcı Adı</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={'text'}
-            value={this.state.username}
-            onChange={this.handleChange}
-            disabled={this.state.isDisabled}
-            aria-describedby="filled-weight-helper-text"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={this.login}
-                >
-                  {button}
-                </IconButton>
-              </InputAdornment>
-            }
-            labelWidth={90}
-          />
-          {!this.state.username ? <FormHelperText id="filled-weight-helper-text">Yarışmaya katılmak için lütfen kullanıcı adı giriniz! </FormHelperText> : null}
-        </FormControl>
+			<div className="flexContainer" style={{ marginTop: 20 }}>
+				<FormControl fullWidth variant="outlined">
+					<InputLabel htmlFor="outlined-adornment-password">Kullanıcı Adı</InputLabel>
+					<OutlinedInput
+						id="outlined-adornment-password"
+						type={'text'}
+						value={this.state.username}
+						onChange={this.handleChange}
+						disabled={this.state.isDisabled}
+						aria-describedby="filled-weight-helper-text"
+						endAdornment={
+							<InputAdornment position="end">
+								<IconButton
+									aria-label="toggle password visibility"
+									onClick={this.login}
+								>
+									{button}
+								</IconButton>
+							</InputAdornment>
+						}
+						labelWidth={90}
+					/>
+					{!this.state.username ? <FormHelperText id="filled-weight-helper-text">Yarışmaya katılmak için lütfen kullanıcı adı giriniz! </FormHelperText> : null}
+				</FormControl>
 			</div>
 		);
 	}

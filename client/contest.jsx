@@ -25,7 +25,7 @@ export default class Contest extends Component {
       selectedAnswerId: 0,
       question: '',
       second: 10,
-      nextQuestionSecond: 10,
+      nextQuestionSecond: 30,
       questionId: 0,
       isCompleted: false,
       showResult: false,
@@ -46,7 +46,7 @@ export default class Contest extends Component {
       questionId: question.id,
       isCompleted: false,
       showResult: false,
-      nextQuestionSecond: 5,
+      nextQuestionSecond: 30,
       result: []
     };
     this.setState(prevState => ({
@@ -153,7 +153,7 @@ export default class Contest extends Component {
   }
 
   render() {
-    if (!this.state.isFinished && !this.state.incorrectAnswer) {
+    if (!this.state.isFinished) {
       return (
         <div className='questionDiv'>
           <ProgressBar state={this.state} questionsLength={this.questions.length} />
@@ -162,14 +162,14 @@ export default class Contest extends Component {
         </div>
       );
     }
-    else if (!this.state.isFinished && this.state.incorrectAnswer) {
-      return (
-        <div className='incorrectAnswer'>
-          ÜZGÜNÜM,<br />
-          KAYBETTİNİZ!
-        </div>
-      );
-    }
+    // else if (!this.state.isFinished && this.state.incorrectAnswer) {
+    //   return (
+    //     <div className='incorrectAnswer'>
+    //       ÜZGÜNÜM,<br />
+    //       KAYBETTİNİZ!
+    //     </div>
+    //   );
+    // }
     else return null;
   }
 }

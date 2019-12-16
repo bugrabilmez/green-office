@@ -83,7 +83,7 @@ body {
 
 .progressBarDiv {
 	width: 300px;
-	border: 10px solid #82b596;
+	border: 10px solid #b7e4c9;
 	height: 0px;
 	margin: 0 40px 0 40px;
 	border-radius: 12px;
@@ -251,4 +251,13 @@ body {
     justify-content: center;
 	background: url('/incorrectAnswer.png') bottom no-repeat;
 	background-size: contain;
+}
+
+.incorrectBarText {
+	font-weight: bold;
+	color: #D80000;
+}
+
+.marginTop10 {
+	margin-top: 10px;
 }
