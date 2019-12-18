@@ -107,7 +107,7 @@ export default class Contest extends Component {
           }
           this.setState(state);
         });
-      }, 5000);
+      }, 7000);
     }
   }
 

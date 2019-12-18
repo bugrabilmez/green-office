@@ -16,8 +16,12 @@ index.get('/getContest', (req, res) => {
 
 index.get('/reset', (req, res) => {
   ormFactory.find(req.app.locals.db.EntContest, { id: 1 }, contest => {
+    const year = moment().year();
+    const month = moment().month() + 1;
+    const day = moment().date();
+    const hour = moment().hour() + 1;
     contest[0].isCompleted = false;
-    contest[0].startingDate = moment().add(45, 's');
+    contest[0].startingDate = moment(`${year}-${month}-${day} ${hour}:00:00`, 'YYYY-MM-DD HH:mm:ss');
     contest[0].save().then(result => {
       req.app.locals.db.EntCompetitorAnswer.destroy({
         where: {},
