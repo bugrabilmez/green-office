@@ -12,7 +12,7 @@ export default class ProgressBar extends Component {
 
 		if (this.props.state.incorrectAnswer) {
 			incorrectAnswerDiv = (
-				<div className="flexContainer">
+				<div className="flexContainer marginTop20">
 					<div className="incorrectBarText">Yarışmadan elendiniz!</div>
 				</div>
 			);
@@ -23,10 +23,10 @@ export default class ProgressBar extends Component {
 			return (
 				<React.Fragment>
 					{incorrectAnswerDiv}
-					<div className="flexContainer marginTop10">
+					<div className="flexContainer marginTop20">
 						<div className="progressBarText">Sonuçlar. Sonraki soru hazırlanıyor. Kalan Süre: {this.props.state.nextQuestionSecond}</div>
 					</div>
-					<div className="flexContainer marginTop10">
+					<div className="flexContainer marginTop20 textAlignCenter">
 						<div dangerouslySetInnerHTML={{ __html: answerInfo }}></div>
 					</div>
 				</React.Fragment>
@@ -34,7 +34,7 @@ export default class ProgressBar extends Component {
 		}
 		else if (this.props.state.isCompleted && !this.props.state.showResult) {
 			return (
-				<div className="flexContainer">
+				<div className="flexContainer marginTop20">
 					<div className="progressBarText">Cevap gönderiliyor...</div>
 				</div>
 			);
