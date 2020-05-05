@@ -46,7 +46,7 @@ export default class ProgressBar extends Component {
 					<div className="flexContainer" >
 						<div className="progressBarText">{'Kalan Süre: ' + this.props.state.second}</div>
 						<div className="progressBarDiv">
-							<div className="progressBarTimeDiv" style={{ width: (10 - this.props.state.second) * 30 }}></div>
+							<div className="progressBarTimeDiv" style={{ width: (this.props.state.startingSecond - this.props.state.second) * (300 / this.props.state.startingSecond) }}></div>
 						</div>
 						<div className="progressBarText">
 							Soru: {this.props.state.order}/{this.props.questionsLength}
