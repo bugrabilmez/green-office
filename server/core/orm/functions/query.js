@@ -1,39 +1,17 @@
-const _get = (model, id, callback) => {
-
-    model
-        .findById(id)
-        .then(result => {
-            callback(result)
-        })
-        .catch(err => {
-            console.log(err);
-        })
+const _get = (model, id) => {
+    return model.findById(id)
 }
 
-const _getAll = (model, callback) => {
+const _getAll = (model) => {
     return model.findAll();
 }
 
-const _find = (model, expression, callback) => {
-    model
-        .findAll({ where: expression })
-        .then(result => {
-            callback(result);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+const _find = (model, expression) => {
+    return model.findAll({ where: expression })
 }
 
-const _findOne = (model, expression, callback) => {
-    model
-        .findOne({ where: expression })
-        .then(result => {
-            callback(result);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+const _findOne = (model, expression) => {
+    return model.findOne({ where: expression })
 }
 
 module.exports = {

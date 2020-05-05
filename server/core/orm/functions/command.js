@@ -1,12 +1,5 @@
-const _create = (model, entity, callback) => {
-    model
-        .create(entity)
-        .then((result) => {
-            callback(result);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+const _create = (model, entity) => {
+    return model.create(entity);
 }
 
 const _update = (model, entity, callback) => {

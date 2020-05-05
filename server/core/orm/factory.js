@@ -11,32 +11,32 @@ const factory = () => {
         return database;
     }
 
-    const _create = (model, entity, callback) => {
-        command.create(model, entity, callback);
+    const _create = (model, entity) => {
+        return command.create(model, entity);
     }
 
-    const _update = (model, entity, callback) => {
-        command.update(model, entity, callback);
+    const _update = (model, entity) => {
+        return command.update(model, entity);
     }
 
-    const _delete = (model, id, callback) => {
-        command.delete(model, id, callback);
+    const _delete = (model, id) => {
+        return command.delete(model, id);
     }
 
-    const _get = (model, id, callback) => {
-        query.get(model, id, callback);
+    const _get = (model, id) => {
+        return query.get(model, id);
     }
 
-    const _getAll = (model, callback) => {
+    const _getAll = (model) => {
         return query.getAll(model);
     }
 
-    const _find = (model, expression, callback) => {
-        query.find(model, expression, callback);
+    const _find = (model, expression) => {
+        return query.find(model, expression);
     }
 
-    const _findOne = (model, expression, callback) => {
-        query.findOne(model, expression, callback);
+    const _findOne = (model, expression) => {
+        return query.findOne(model, expression);
     }
 
     return {
