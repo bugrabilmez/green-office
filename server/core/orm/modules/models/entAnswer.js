@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        answerInfo: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
         isTrue: {
             type: DataTypes.BOOLEAN,
             allowNull: false

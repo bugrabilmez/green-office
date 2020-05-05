@@ -74,7 +74,8 @@ index.get('/getResult', (req, res) => {
         result.push({
           id: answer.id,
           count: competitorAnswers.filter(x => x.answerId === answer.id).length,
-          isTrue: answer.isTrue
+          isTrue: answer.isTrue,
+          answerInfo: answer.answerInfo
         });
       });
       res.json(result);
