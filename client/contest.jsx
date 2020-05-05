@@ -15,7 +15,7 @@ export default class Contest extends Component {
     this._startCountDown = this._startCountDown.bind(this);
     this._clearCountDown = this._clearCountDown.bind(this);
     this._onAnswerClick = this._onAnswerClick.bind(this);
-    this._sendAnswer = this._sendAnswer.bind(this);
+    this._setQuestionCompleted = this._setQuestionCompleted.bind(this);
     this._getResult = this._getResult.bind(this);
     this._nextQuestion = this._nextQuestion.bind(this);
     this.questions = [];
@@ -83,9 +83,9 @@ export default class Contest extends Component {
     clearInterval(this.intervalId);
   }
 
-  _sendAnswer() {
+  _setQuestionCompleted() {
     if (!this.state.isCompleted && !this.state.showResult) {
-      Service.sendAnswer(this.state.selectedAnswerId, this.state.questionId, data => { });
+      this._clearCountDown();
       const state = Object.assign({}, this.state);
       state.isCompleted = true;
       this.setState(state);
@@ -115,12 +115,13 @@ export default class Contest extends Component {
 
   _nextQuestion() {
     if (this.state.showResult) {
-      this.intervalId = setInterval(() => {
-        const state = Object.assign({}, this.state);
-        state.nextQuestionSecond = state.nextQuestionSecond - 1;
-        this.setState(state);
-      }, 1000);
-
+      if (this.state.nextQuestionSecond === 20) {
+        this.intervalId = setInterval(() => {
+          const state = Object.assign({}, this.state);
+          state.nextQuestionSecond = state.nextQuestionSecond - 1;
+          this.setState(state);
+        }, 1000);
+      }
       if (this.state.nextQuestionSecond === 0) {
         this._clearCountDown();
         this._setQuestion();
@@ -129,9 +130,10 @@ export default class Contest extends Component {
   }
 
   _onAnswerClick(answerId) {
-    if (this.state.second > 0 && !this.state.incorrectAnswer) {
+    if (this.state.second >= 0 && !this.state.incorrectAnswer && !this.state.isCompleted && !this.state.showResult && !this.state.selectedAnswerId) {
       const state = Object.assign({}, this.state);
       state.selectedAnswerId = answerId;
+      Service.sendAnswer(answerId, this.state.questionId, data => { });
       this.setState(state);
     }
   }
@@ -143,12 +145,9 @@ export default class Contest extends Component {
     });
   }
 
-  componentDidMount() { }
-
   componentDidUpdate(prevState) {
     if (this.state.second === 0 && prevState !== this.state && !this.state.isFinished) {
-      this._clearCountDown();
-      this._sendAnswer();
+      this._setQuestionCompleted();
       this._getResult();
       this._nextQuestion();
     }
