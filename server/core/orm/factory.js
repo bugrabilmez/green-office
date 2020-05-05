@@ -6,8 +6,8 @@ const factory = () => {
 
     const _start = () => {
         const database = connection.create();
-        connection.sync(database); 
-        connection.authenticate(database);                               
+        connection.sync(database);
+        connection.authenticate(database);
         return database;
     }
 
@@ -28,7 +28,7 @@ const factory = () => {
     }
 
     const _getAll = (model, callback) => {
-        query.getAll(model, callback);
+        return query.getAll(model);
     }
 
     const _find = (model, expression, callback) => {

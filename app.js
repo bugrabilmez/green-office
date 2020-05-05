@@ -58,7 +58,7 @@ app.use('/', index);
 app.use(handlerFactory.exceptionHandler);
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   console.log(err.message);
   res.locals.message = err.message;

@@ -67,3 +67,4 @@ typings/
 package-lock.json
 
 db/database.sqlite
+build/bundle.js

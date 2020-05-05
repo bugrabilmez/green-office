@@ -3,31 +3,33 @@ const index = express.Router();
 const ormFactory = require('../core/orm/factory').instance();
 const _ = require('lodash');
 const moment = require('moment');
+const contestUtils = require('../utils/contest');
 
 index.get('/', (req, res) => {
   res.render('index');
 });
 
 index.get('/getContest', (req, res) => {
-  ormFactory.getAll(req.app.locals.db.EntContest, data => {
-    res.json(data);
+  ormFactory.getAll(req.app.locals.db.EntContest).then(result => {
+    result.forEach(c => {
+      c.dataValues = { ...c.dataValues, ...contestUtils.calculateRemaining(c.dataValues.startingDate) }
+    });
+    res.json(result);
+  }).catch((err) => {
+    console.log(err);
   });
 });
 
-index.get('/reset', (req, res) => {
+index.get('/reset/:m', (req, res) => {
   ormFactory.find(req.app.locals.db.EntContest, { id: 1 }, contest => {
-    const year = moment().year();
-    const month = moment().month() + 1;
-    const day = moment().date();
-    const hour = moment().hour() + 1;
     contest[0].isCompleted = false;
-    contest[0].startingDate = moment(`${year}-${month}-${day} ${hour}:00:00`, 'YYYY-MM-DD HH:mm:ss');
+    contest[0].startingDate = moment().add(parseInt(req.params.m), 'second');
     contest[0].save().then(result => {
       req.app.locals.db.EntCompetitorAnswer.destroy({
         where: {},
         truncate: true
       }).then(result => {
-        res.json({ result: 'reset test contest' });
+        res.json({ result: `Reset was successfully, now + ${req.params.m} second:  new starting date: ${contest[0].startingDate}` });
       });
     });
   });
