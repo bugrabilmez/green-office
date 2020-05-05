@@ -21,7 +21,7 @@ index.get('/getContest', (req, res) => {
 });
 
 index.get('/reset/:m', (req, res) => {
-  ormFactory.find(req.app.locals.db.EntContest, { id: 1 }, contest => {
+  ormFactory.find(req.app.locals.db.EntContest, { id: 2 }, contest => {
     contest[0].isCompleted = false;
     contest[0].startingDate = moment().add(parseInt(req.params.m), 'second');
     contest[0].save().then(result => {
