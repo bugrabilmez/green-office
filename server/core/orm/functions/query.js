@@ -11,14 +11,7 @@ const _get = (model, id, callback) => {
 }
 
 const _getAll = (model, callback) => {
-    model
-        .findAll()
-        .then(result => {
-            callback(result);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+    return model.findAll();
 }
 
 const _find = (model, expression, callback) => {

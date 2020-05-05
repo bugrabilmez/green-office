@@ -11,6 +11,8 @@ export default class Root extends Component {
 	constructor() {
 		super();
 		this.intervalId = 0;
+		this.isClearIntervalServer = false;
+		this.isStartIntervalCountDown = false;
 		this.state = {
 			contest: {
 				id: 0,
@@ -26,7 +28,8 @@ export default class Root extends Component {
 				countDown: false,
 				isTimeUp: false,
 				isCompleted: false,
-				hasStarted: false
+				hasStarted: false,
+				status: null
 			}
 		};
 
@@ -39,24 +42,46 @@ export default class Root extends Component {
 		});
 	}
 
-	componentDidMount() {
-		if (!this.state.contest.isCompleted) {
+	componentDidUpdate(prevProps, prevState) {
+		if (prevState.contest.id !== this.state.contest.id) {
+			if (!this.state.contest.isCompleted && !this.state.contest.hasStarted && !this.state.contest.countDown) {
+				this.intervalId = setInterval(() => {
+					Service.getContest(contest => {
+						this.setState({ contest: contest });
+					});
+				}, 5000);
+			}
+		}
+
+		if ((this.state.contest.isCompleted || this.state.contest.hasStarted || this.state.contest.countDown) && !this.isClearIntervalServer) {
+			this.intervalId = 0;
+			this.isClearIntervalServer = true;
+		}
+
+		if (!this.state.contest.isCompleted && !this.state.contest.hasStarted && this.state.contest.countDown && !this.isStartIntervalCountDown) {
+			this.isStartIntervalCountDown = true;
 			this.intervalId = setInterval(() => {
-				const contestTime = Service.calculateRemaining(this.state.contest.startingDate);
+				let totalSecond = this.state.contest.timeRemainingMinutes * 60 + this.state.contest.timeRemainingSeconds;
+				totalSecond--;
+				const state = {
+					timeRemainingMinutes: Math.floor(totalSecond / 60),
+					timeRemainingSeconds: totalSecond % 60,
+					isTimeUp: totalSecond === 0
+				};
 				this.setState(prevState => ({
 					contest: {
 						...prevState.contest,
-						...contestTime
+						...state
 					}
 				}));
 			}, 1000);
 		}
-	}
 
-	componentDidUpdate() {
-		if (this.state.contest.isTimeUp) {
+		if (!this.state.contest.isCompleted && this.state.contest.isTimeUp && this.isStartIntervalCountDown) {
 			clearInterval(this.intervalId);
+			this.intervalId = 0;
 		}
+
 	}
 
 	finishingContest() {
@@ -72,7 +97,7 @@ export default class Root extends Component {
 	}
 
 	render() {
-		if (!this.state.contest.isCompleted && !this.state.contest.hasStarted) {
+		if (!this.state.contest.isCompleted && !this.state.contest.hasStarted && this.state.contest.status) {
 			if (!this.state.contest.isTimeUp && !this.state.contest.countDown) {
 				return (
 					<Card className="contestCard">
@@ -116,7 +141,7 @@ export default class Root extends Component {
 					</Card>
 				);
 			}
-		} else if (!this.state.contest.isCompleted && this.state.contest.hasStarted) {
+		} else if (!this.state.contest.isCompleted && this.state.contest.hasStarted && this.state.contest.status) {
 			return (
 				<Card className="contestCard">
 					<div className="cardItems">
@@ -129,7 +154,7 @@ export default class Root extends Component {
 					</div>
 				</Card>
 			);
-		} else if (this.state.contest.isCompleted) {
+		} else if (this.state.contest.isCompleted && this.state.contest.status) {
 			return <Result contestId={this.state.contest.id} />;
 		} else {
 			return null;
