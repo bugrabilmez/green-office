@@ -25,7 +25,8 @@ export default class Contest extends Component {
       selectedAnswerId: 0,
       question: '',
       second: 10,
-      nextQuestionSecond: 30,
+      startingSecond: 10,
+      nextQuestionSecond: 20,
       questionId: 0,
       isCompleted: false,
       showResult: false,
@@ -43,10 +44,11 @@ export default class Contest extends Component {
       question: question.question,
       selectedAnswerId: 0,
       second: question.second,
+      startingSecond: question.second,
       questionId: question.id,
       isCompleted: false,
       showResult: false,
-      nextQuestionSecond: 30,
+      nextQuestionSecond: 20,
       result: []
     };
     this.setState(prevState => ({
