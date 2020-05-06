@@ -20,11 +20,12 @@ export default class ProgressBar extends Component {
 
 		if (this.props.state.isCompleted && this.props.state.showResult) {
 			const answerInfo = this.props.state.result.find(x => x.isTrue === true).answerInfo;
+			const message = this.props.state.isFinished ? 'Yarışma sonuçları hazırlanıyor!' : 'Sonraki soru hazırlanıyor.';
 			return (
 				<React.Fragment>
 					{incorrectAnswerDiv}
 					<div className="flexContainer marginTop20">
-						<div className="progressBarText">Sonuçlar. Sonraki soru hazırlanıyor. Kalan Süre: {this.props.state.nextQuestionSecond}</div>
+						<div className="progressBarText">Sonuçlar. {message} Kalan Süre: {this.props.state.nextQuestionSecond}</div>
 					</div>
 					<div className="flexContainer marginTop20 textAlignCenter">
 						<div dangerouslySetInnerHTML={{ __html: answerInfo }}></div>
@@ -35,7 +36,7 @@ export default class ProgressBar extends Component {
 		else if (this.props.state.isCompleted && !this.props.state.showResult) {
 			return (
 				<div className="flexContainer marginTop20">
-					<div className="progressBarText">Cevap gönderiliyor...</div>
+					<div className="progressBarText">Sonuçlar hazırlanıyor...</div>
 				</div>
 			);
 		}
