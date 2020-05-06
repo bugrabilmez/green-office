@@ -77,11 +77,20 @@ const _getContestResult = (contestId, callback) => {
     });
 };
 
+const saveUsername = (username, callback) => {
+  instance
+    .post('/saveUsername', { username })
+    .then(response => {
+      callback(response);
+    });
+};
+
 module.exports = {
   getContest: _getContest,
   getQuestions: _getQuestions,
   getAnswers: _getAnswers,
   sendAnswer: _sendAnswer,
   getResult: _getResult,
-  getContestResult: _getContestResult
+  getContestResult: _getContestResult,
+  saveUsername
 };
