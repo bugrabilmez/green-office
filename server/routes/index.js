@@ -20,7 +20,7 @@ index.get('/getContest', (req, res, next) => {
   });
 });
 
-index.get('/reset/:m', (req, res) => {
+index.get('/reset/:m', (req, res, next) => {
   return ormFactory.find(req.app.locals.db.EntContest, { id: 2 }).then(contest => {
     contest[0].isCompleted = false;
     contest[0].startingDate = moment().add(parseInt(req.params.m), 'second');
@@ -37,7 +37,7 @@ index.get('/reset/:m', (req, res) => {
   });
 });
 
-index.get('/getQuestions', (req, res) => {
+index.get('/getQuestions', (req, res, next) => {
   return ormFactory.find(req.app.locals.db.EntQuestion, { contestId: req.query.contestId }).then(data => {
     return res.json(data);
   }).catch((err) => {
@@ -45,7 +45,7 @@ index.get('/getQuestions', (req, res) => {
   });
 });
 
-index.get('/getAnswers', (req, res) => {
+index.get('/getAnswers', (req, res, next) => {
   return ormFactory.find(req.app.locals.db.EntAnswer, { questionId: req.query.questionId }).then(data => {
     return res.json(
       data.map(x => {
@@ -57,7 +57,7 @@ index.get('/getAnswers', (req, res) => {
   });
 });
 
-index.post('/sendAnswer', (req, res) => {
+index.post('/sendAnswer', (req, res, next) => {
   return ormFactory.create(
     req.app.locals.db.EntCompetitorAnswer,
     {
@@ -75,7 +75,7 @@ index.post('/sendAnswer', (req, res) => {
     });
 });
 
-index.get('/getResult', (req, res) => {
+index.get('/getResult', (req, res, next) => {
   return ormFactory.find(req.app.locals.db.EntAnswer, { questionId: req.query.questionId }).then(answers => {
     return ormFactory.find(req.app.locals.db.EntCompetitorAnswer, { questionId: req.query.questionId }).then(competitorAnswers => {
       const result = [];
@@ -132,5 +132,27 @@ index.get('/createContestResult', (req, res) => {
     });
   });
 });
+
+index.post('/saveUsername', (req, res, next) => {
+  return ormFactory.findOne(req.app.locals.db.EntUser, { username: req.body.username })
+    .then(user => {
+      return user;
+    })
+    .then((user) => {
+      if (user) {
+        return res.json({ saveSuccessfull: false });
+      } else {
+        return ormFactory.create(req.app.locals.db.EntUser, { username: req.body.username })
+          .then(data => {
+            return res.json({ user: data, saveSuccessfull: true });
+          })
+          .catch((err) => {
+            next(err);
+          });
+      }
+    })
+    .catch(err => next(err));
+
+})
 
 module.exports = index;
