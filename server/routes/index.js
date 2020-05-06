@@ -97,20 +97,30 @@ index.get('/getResult', (req, res, next) => {
 });
 
 index.get('/createContestResult', (req, res) => {
-  return ormFactory.find(req.app.locals.db.EntContest, { id: req.query.contestId }).then(contest => {
-    return ormFactory.find(req.app.locals.db.EntQuestion, { contestId: req.query.contestId }).then(questions => {
+
+  Promise
+    .all([ormFactory.findOne(req.app.locals.db.EntContest, { id: req.query.contestId }), ormFactory.find(req.app.locals.db.EntQuestion, { contestId: req.query.contestId })])
+    .then(([contest, questions]) => {
+
       const questionIdList = questions.map(q => q.id);
-      return ormFactory.find(req.app.locals.db.EntAnswer, { questionId: { $in: questionIdList } }).then(answers => {
-        return ormFactory.find(req.app.locals.db.EntCompetitorAnswer, { questionId: { $in: questionIdList } }).then(competitorAnswers => {
+      const expressionQuestionAnswer = { questionId: { $in: questionIdList }, isTrue: true }
+      const expressionCompetitorAnswer = { questionId: { $in: questionIdList } };
+
+      Promise
+        .all([ormFactory.find(req.app.locals.db.EntAnswer, expressionQuestionAnswer), ormFactory.find(req.app.locals.db.EntCompetitorAnswer, expressionCompetitorAnswer)])
+        .then(([trueAnswers, competitorAnswers]) => {
+
           const userAnswers = _.chain(competitorAnswers)
             .groupBy('identity')
             .map((value, key) => ({ identity: key, answers: value }))
             .value();
+
           const winners = [];
+
           userAnswers.forEach(user => {
             let isWinner = true;
             questionIdList.forEach(questionId => {
-              const questionTrueAnswer = answers.find(a => a.questionId === questionId && a.isTrue);
+              const questionTrueAnswer = trueAnswers.find(a => a.questionId === questionId);
               const userAnswer = user.answers.find(a => a.questionId === questionId);
               if (!userAnswer || !questionTrueAnswer || userAnswer.answerId !== questionTrueAnswer.id) {
                 isWinner = false;
@@ -120,17 +130,19 @@ index.get('/createContestResult', (req, res) => {
               winners.push(user.identity);
             }
           });
-          contest[0].isCompleted = true;
-          return contest[0].save().then(result => {
+
+          contest.isCompleted = true;
+          return contest.save().then(result => {
             return res.json({
               winners,
               result
             });
           });
-        });
-      });
-    });
-  });
+
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
 });
 
 index.post('/saveUsername', (req, res, next) => {

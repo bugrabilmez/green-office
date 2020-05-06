@@ -11,11 +11,9 @@ export default class Result extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      Service.getContestResult(this.props.contestId, result => {
-        this.setState({ winners: result.data.winners, isCalculated: true });
-      });
-    }, 5000);
+    Service.getContestResult(this.props.contestId, result => {
+      this.setState({ winners: result.data.winners, isCalculated: true });
+    });
   }
 
   render() {
