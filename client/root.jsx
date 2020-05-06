@@ -54,6 +54,7 @@ export default class Root extends Component {
 		}
 
 		if ((this.state.contest.isCompleted || this.state.contest.hasStarted || this.state.contest.countDown) && !this.isClearIntervalServer) {
+			clearInterval(this.intervalId);
 			this.intervalId = 0;
 			this.isClearIntervalServer = true;
 		}

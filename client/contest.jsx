@@ -105,7 +105,6 @@ export default class Contest extends Component {
           }
           if (this.state.order === this.questions.length) {
             state.isFinished = true;
-            this.props.finishingContest();
           }
           this.setState(state);
         });
@@ -124,7 +123,11 @@ export default class Contest extends Component {
       }
       if (this.state.nextQuestionSecond === 0) {
         this._clearCountDown();
-        this._setQuestion();
+        if (this.state.order === this.questions.length) {
+          this.props.finishingContest();
+        } else {
+          this._setQuestion();
+        }
       }
     }
   }
@@ -146,7 +149,7 @@ export default class Contest extends Component {
   }
 
   componentDidUpdate(prevState) {
-    if (this.state.second === 0 && prevState !== this.state && !this.state.isFinished) {
+    if (this.state.second === 0 && prevState !== this.state) {
       this._setQuestionCompleted();
       this._getResult();
       this._nextQuestion();
@@ -154,15 +157,14 @@ export default class Contest extends Component {
   }
 
   render() {
-    if (!this.state.isFinished) {
-      return (
-        <div className='questionDiv'>
-          <ProgressBar state={this.state} questionsLength={this.questions.length} />
-          <div className='question'>{this.state.question}</div>
-          <Answers state={this.state} onAnswerClick={this._onAnswerClick} />
-        </div>
-      );
-    }
+    return (
+      <div className='questionDiv'>
+        <ProgressBar state={this.state} questionsLength={this.questions.length} />
+        <div className='question'>{this.state.question}</div>
+        <Answers state={this.state} onAnswerClick={this._onAnswerClick} />
+      </div>
+    );
+
     // else if (!this.state.isFinished && this.state.incorrectAnswer) {
     //   return (
     //     <div className='incorrectAnswer'>
@@ -171,6 +173,6 @@ export default class Contest extends Component {
     //     </div>
     //   );
     // }
-    else return null;
+    //else return null;
   }
 }
