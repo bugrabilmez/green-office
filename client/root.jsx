@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import * as Service from './core/service';
-import styles from './style/style.css';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Contest from './contest';
 import User from './userName';
 import Result from './contest/result';
+import FrameGrid from './contest/frameGrid';
 
 export default class Root extends Component {
 	constructor() {
@@ -101,19 +99,15 @@ export default class Root extends Component {
 		if (!this.state.contest.isCompleted && !this.state.contest.hasStarted && this.state.contest.status) {
 			if (!this.state.contest.isTimeUp && !this.state.contest.countDown) {
 				return (
-					<Card className="contestCard">
-						<CardContent>
-							<div className="cardItems">
-								<div className="contestTitle">{this.state.contest.name}</div>
-								<div className="contestInfo">{this.state.contest.description}</div>
-								<User />
-								<div className="contestTime">
-									<div className="contestTimeTitle">Başlangıç Tarihi</div>
-									<div className="contestTimeStartDate">{this.state.contest.startingDateString}</div>
-								</div>
-							</div>
-						</CardContent>
-					</Card>
+					<FrameGrid>
+						<div className="contestTitle">{this.state.contest.name}</div>
+						<div className="contestInfo">{this.state.contest.description}</div>
+						<User />
+						<div className="contestTime">
+							<div className="contestTimeTitle">Başlangıç Tarihi</div>
+							<div className="contestTimeStartDate">{this.state.contest.startingDateString}</div>
+						</div>
+					</FrameGrid>
 				);
 			} else if (!this.state.contest.isTimeUp && this.state.contest.countDown) {
 				let minutes = this.state.contest.timeRemainingMinutes < 10 ? '0' : '';
@@ -121,39 +115,35 @@ export default class Root extends Component {
 				let seconds = this.state.contest.timeRemainingSeconds < 10 ? '0' : '';
 				seconds += this.state.contest.timeRemainingSeconds;
 				return (
-					<Card className="contestCard">
-						<div className="cardItems">
-							<div className="contestTitle">{this.state.contest.name}</div>
-							<div className="contestInfo">{this.state.contest.description}</div>
-							<User />
-							<div className="contestTime">
-								<div className="contestTimeTitle">Yarışma Başlıyor!</div>
-								<div className="remainingTime">
-									{minutes}:{seconds}
-								</div>
+					<FrameGrid>
+						<div className="contestTitle">{this.state.contest.name}</div>
+						<div className="contestInfo">{this.state.contest.description}</div>
+						<User />
+						<div className="contestTime">
+							<div className="contestTimeTitle">Yarışma Başlıyor!</div>
+							<div className="remainingTime">
+								{minutes}:{seconds}
 							</div>
 						</div>
-					</Card>
+					</FrameGrid>
 				);
 			} else {
 				return (
-					<Card className="contestCard">
+					<FrameGrid>
 						<Contest contest={this.state.contest} finishingContest={this.finishingContest}></Contest>
-					</Card>
+					</FrameGrid>
 				);
 			}
 		} else if (!this.state.contest.isCompleted && this.state.contest.hasStarted && this.state.contest.status) {
 			return (
-				<Card className="contestCard">
-					<div className="cardItems">
-						<div className="contestTitle">{this.state.contest.name}</div>
-						<div className="contestInfo">{this.state.contest.description}</div>
-						<div className="contestTime">
-							<div className="contestTimeTitle">Yarışma Başladı!</div>
-							<div className="contestTimeStartDate">Lütfen sonuçları bekleyiniz...</div>
-						</div>
+				<FrameGrid>
+					<div className="contestTitle">{this.state.contest.name}</div>
+					<div className="contestInfo">{this.state.contest.description}</div>
+					<div className="contestTime">
+						<div className="contestTimeTitle">Yarışma Başladı!</div>
+						<div className="contestTimeStartDate">Lütfen sonuçları bekleyiniz...</div>
 					</div>
-				</Card>
+				</FrameGrid>
 			);
 		} else if (this.state.contest.isCompleted && this.state.contest.status) {
 			return <Result contestId={this.state.contest.id} />;
