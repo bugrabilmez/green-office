@@ -37,7 +37,9 @@ export default class Result extends Component {
           style={{ minHeight: '100vh' }}>
           <Grid item xs={12} sm={6} className="resultListSide">
             <div><img src="/images/contestCompleted.png" className="img-responsive marginAuto" alt="Yarışma tamamlandı!" /></div>
-            <div className="resultMainText">{mainText}</div>
+            <div className="resultMainText">
+              {mainText}
+            </div>
           </Grid>
           <Grid item xs={12} sm={6} className={"resultMadal"}>
           </Grid>

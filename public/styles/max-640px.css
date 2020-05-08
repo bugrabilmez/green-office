@@ -52,7 +52,7 @@
   	overflow-x: hidden;
   	overflow-y: auto !important;
   	height: auto;
-  	max-height: calc(100vh - 200px);
+  	max-height: calc(95vh - 100px);
   	font-size: 24px;
 	font-weight: bold;
 	color: #fefefe;
