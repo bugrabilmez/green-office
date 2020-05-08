@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import * as Service from './core/service';
 import ProgressBar from './contest/progressBar';
 import Answers from './contest/answers';
 import InsideGrid from './contest/insideGrid';
-import { Grid } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
-const _ = require('lodash');
-
-export default class Contest extends Component {
+export default class Contest extends React.Component {
   constructor() {
     super();
     this._setQuestion = this._setQuestion.bind(this);

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Answers extends Component {
+export default class Answers extends React.Component {
 	constructor() {
 		super();
 	}

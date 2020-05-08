@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const { findIndex } = require('lodash');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const passport_jwt = require('passport-jwt');
@@ -32,7 +32,7 @@ const jwtOptions = {
 const strategy = new JwtStrategy(jwtOptions, (payload, done) => {
     console.log('payload received', payload);
     // db
-    const user = users[_.findIndex(users, { id: payload.id })];
+    const user = users[findIndex(users, { id: payload.id })];
     if (user) {
         done(null, user);
     } else {
@@ -54,7 +54,7 @@ const _signIn = (req, res, next) => {
     const name = req.body.name;
     const password = req.body.password;
     // usually this would be a database call:
-    var user = users[_.findIndex(users, { name: name })];
+    var user = users[findIndex(users, { name: name })];
     if (!user) {
         res.status(401).json({ message: "no such user found" });
     }

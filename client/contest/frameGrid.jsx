@@ -1,5 +1,7 @@
 import React from 'react';
-import { Card, Grid, CardContent } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import Grid from '@material-ui/core/Grid';
+import CardContent from '@material-ui/core/CardContent';
 
 class FrameGrid extends React.PureComponent {
 

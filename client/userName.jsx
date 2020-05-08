@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import * as localStorage from './core/localStorage';
 import * as Service from './core/service';
+
 import CreateIcon from '@material-ui/icons/Create';
 import SaveIcon from '@material-ui/icons/Save';
-
 import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -11,7 +11,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
-export default class Root extends Component {
+export default class Root extends React.Component {
 	constructor() {
 		super();
 		this.state = {

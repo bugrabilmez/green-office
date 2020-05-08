@@ -1,7 +1,7 @@
 const express = require('express');
 const index = express.Router();
 const ormFactory = require('../core/orm/factory').instance();
-const _ = require('lodash');
+const { chain } = require('lodash');
 const moment = require('moment');
 const contestUtils = require('../utils/contest');
 
@@ -110,7 +110,7 @@ index.get('/createContestResult', (req, res) => {
         .all([ormFactory.find(req.app.locals.db.EntAnswer, expressionQuestionAnswer), ormFactory.find(req.app.locals.db.EntCompetitorAnswer, expressionCompetitorAnswer)])
         .then(([trueAnswers, competitorAnswers]) => {
 
-          const userAnswers = _.chain(competitorAnswers)
+          const userAnswers = chain(competitorAnswers)
             .groupBy('identity')
             .map((value, key) => ({ identity: key, answers: value }))
             .value();
