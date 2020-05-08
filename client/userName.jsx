@@ -94,7 +94,7 @@ export default class Root extends Component {
 		const button = this.state.buttonName === 'edit' ? <CreateIcon /> : <SaveIcon />;
 
 		return (
-			<div className="flexContainer" style={{ marginTop: 20 }}>
+			<div style={{ marginTop: 20 }}>
 				<FormControl fullWidth variant="outlined">
 					<InputLabel htmlFor="outlined-adornment-password">Kullanıcı Adı</InputLabel>
 					<OutlinedInput
