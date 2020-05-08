@@ -24,7 +24,6 @@
   "author": "Mehmet Buğra Bilmez",
   "license": "MIT",
   "dependencies": {
-    "sqlite3": "^4.1.1"
   },
   "devDependencies": {
     "@material-ui/core": "^3.9.0",
@@ -72,7 +71,9 @@
     "rimraf": "^3.0.2",
     "sequelize": "^4.37.6",
     "serve-favicon": "^2.4.5",
+    "sqlite3": "^4.2.0",
     "style-loader": "^0.23.1",
+    "terser-webpack-plugin": "^3.0.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "2.0.6",
