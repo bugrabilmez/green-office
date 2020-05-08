@@ -31,8 +31,7 @@ bower_components
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
-build/.*
-build/bundle.js
+build/
 .vscode/.*
 .vscode/
 
@@ -66,5 +65,4 @@ typings/
 
 package-lock.json
 
-db/database.sqlite
-build/bundle.js
+db/

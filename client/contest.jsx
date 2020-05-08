@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import * as Service from './core/service';
 import ProgressBar from './contest/progressBar';
 import Answers from './contest/answers';
-import Result from './contest/result';
-import * as localStorage from './core/localStorage';
+import InsideGrid from './contest/insideGrid';
+import { Grid } from '@material-ui/core';
 
 const _ = require('lodash');
 
@@ -158,21 +158,17 @@ export default class Contest extends Component {
 
   render() {
     return (
-      <div className='questionDiv'>
-        <ProgressBar state={this.state} questionsLength={this.questions.length} />
-        <div className='question'>{this.state.question}</div>
-        <Answers state={this.state} onAnswerClick={this._onAnswerClick} />
-      </div>
+      <InsideGrid spacing={24}>
+        <Grid item xs={12}>
+          <ProgressBar state={this.state} questionsLength={this.questions.length} />
+        </Grid>
+        <Grid item xs={12}>
+          <div className='question'>{this.state.question}</div>
+        </Grid>
+        <Grid item xs={12}>
+          <Answers state={this.state} onAnswerClick={this._onAnswerClick} />
+        </Grid>
+      </InsideGrid>
     );
-
-    // else if (!this.state.isFinished && this.state.incorrectAnswer) {
-    //   return (
-    //     <div className='incorrectAnswer'>
-    //       ÜZGÜNÜM,<br />
-    //       KAYBETTİNİZ!
-    //     </div>
-    //   );
-    // }
-    //else return null;
   }
 }
