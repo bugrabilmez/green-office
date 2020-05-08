@@ -40,7 +40,7 @@ if (nodeEnv.value === "development") {
     })
   );
 } else {
-  app.use("/build", express.static(path.join(__dirname, "build")));
+  app.use("/", express.static(path.join(__dirname, "build")));
 }
 
 // this will sync db for starting.
