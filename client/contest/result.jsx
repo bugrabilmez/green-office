@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as Service from '../core/service';
+import { Grid } from '@material-ui/core';
 
 export default class Result extends Component {
   constructor() {
@@ -29,13 +30,18 @@ export default class Result extends Component {
 
     return (
       <div className="resultMain">
-        <div className="flexContainer" style={{ height: '100%' }}>
-          <div className="resultHalfDiv resultItems">
-            <div className="contestCompleted"></div>
+        <Grid
+          container
+          alignItems="center"
+          justify="center"
+          style={{ minHeight: '100vh' }}>
+          <Grid item xs={12} sm={6} className="resultListSide">
+            <div><img src="/images/contestCompleted.png" className="img-responsive marginAuto" alt="Yarışma tamamlandı!" /></div>
             <div className="resultMainText">{mainText}</div>
-          </div>
-          <div className="resultHalfDiv resultMadal"></div>
-        </div>
+          </Grid>
+          <Grid item xs={12} sm={6} className={"resultMadal"}>
+          </Grid>
+        </Grid>
       </div>
     );
   }
