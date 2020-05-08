@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Grid } from '@material-ui/core';
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import InsideGrid from './insideGrid';
 
-export default class ProgressBar extends Component {
+export default class ProgressBar extends React.Component {
 	constructor() {
 		super();
 	}

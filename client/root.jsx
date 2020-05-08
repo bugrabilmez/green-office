@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import * as Service from './core/service';
 import Contest from './contest';
 import User from './userName';
 import Result from './contest/result';
 import FrameGrid from './contest/frameGrid';
 
-export default class Root extends Component {
+export default class Root extends React.Component {
 	constructor() {
 		super();
 		this.intervalId = 0;

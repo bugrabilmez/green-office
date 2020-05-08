@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import * as Service from '../core/service';
-import { Grid } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
-export default class Result extends Component {
+export default class Result extends React.Component {
   constructor() {
     super();
     this.state = {

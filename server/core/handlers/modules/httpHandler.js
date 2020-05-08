@@ -1,6 +1,6 @@
 const Log = require('../class/http');
 const ormFactory = require('../../orm/factory').instance();
-const _ = require('lodash');
+const { isNil } = require('lodash');
 
 const _writeDb = (req, res, next) => {
 
@@ -33,7 +33,7 @@ const _writeDb = (req, res, next) => {
       body
     );
 
-    if (!_.isNil(req.user) && !_.isNil(req.user.identityNumber))
+    if (!isNil(req.user) && !isNil(req.user.identityNumber))
       log.created = req.user.identityNumber;
 
     ormFactory.create(req.app.locals.db.SysHttp, log)

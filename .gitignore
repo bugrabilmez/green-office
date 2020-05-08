@@ -66,3 +66,4 @@ typings/
 package-lock.json
 
 db/
+yarn.lock

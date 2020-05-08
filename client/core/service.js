@@ -1,7 +1,4 @@
 import axios from 'axios';
-import momentTz from 'moment-timezone';
-
-const _ = require('lodash');
 
 const instance = axios.create({
   timeout: 2500
@@ -9,8 +6,7 @@ const instance = axios.create({
 
 const _getContest = callback => {
   instance.get('/getContest').then(response => {
-    const contests = _.sortBy(response.data, ['id']);
-    let contest = contests[0];
+    let contest = response.data[0];
     contest.hasStarted = !!contest.isTimeUp;
     contest.status = true;
     callback(contest);
