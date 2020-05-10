@@ -10,8 +10,8 @@
     "start": "set \"NODE_PATH=./\" && set \"NODE_ENV=development\" && node ./bin/www",
     "start:linux": "export \"NODE_PATH=./\" && export \"NODE_ENV=development\" && node ./bin/www",
     "start:prod": "set \"NODE_PATH=./\" &&  set \"NODE_ENV=production\" && node ./bin/www",
-    "start:prod:linux": "set \"NODE_PATH=./\" &&  set \"NODE_ENV=production\" && node ./bin/www",
-    "prod": "npm run build:prod && npm run start:prod",
+    "start:prod:linux": "export \"NODE_PATH=./\" &&  export \"NODE_ENV=production\" && node ./bin/www",
+    "prod": "npm run clean && npm run build:prod && npm run start:prod",
     "prod:linux": "npm run clean && npm run build:prod && npm run start:prod:linux",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf build"
