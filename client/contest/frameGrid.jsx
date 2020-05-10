@@ -18,6 +18,14 @@ class FrameGrid extends React.PureComponent {
                             {this.props.children}
                         </CardContent>
                     </Card>
+                    <Card className="copyRightCard">
+                        <CardContent className="copyRightCardContent">
+                            <a href="https://www.kaleyazilim.com.tr" target="_blank">
+                                <img src="/images/kale-software-logo.png" alt="Kale Yazılım A.Ş." />
+                            </a>
+                            &nbsp;&nbsp;Yeşil Ofis Yarışması, ©2020, Kale Yazılım.
+                        </CardContent>
+                    </Card>
                 </Grid>
             </Grid>
         );
