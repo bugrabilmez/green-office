@@ -42,7 +42,7 @@ export default class Root extends React.Component {
 
 	componentDidUpdate(prevProps, prevState) {
 		if (prevState.contest.id !== this.state.contest.id) {
-			if (!this.state.contest.isCompleted && !this.state.contest.hasStarted && !this.state.contest.countDown) {
+			if (!this.state.contest.isCompleted && !this.state.contest.countDown) {
 				this.intervalId = setInterval(() => {
 					Service.getContest(contest => {
 						this.setState({ contest: contest });
@@ -51,7 +51,7 @@ export default class Root extends React.Component {
 			}
 		}
 
-		if ((this.state.contest.isCompleted || this.state.contest.hasStarted || this.state.contest.countDown) && !this.isClearIntervalServer) {
+		if ((this.state.contest.isCompleted || this.state.contest.countDown) && !this.isClearIntervalServer) {
 			clearInterval(this.intervalId);
 			this.intervalId = 0;
 			this.isClearIntervalServer = true;
