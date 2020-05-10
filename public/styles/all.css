@@ -145,3 +145,17 @@ body {
     max-width: 100%;
     height: auto;
 }
+
+.copyRightCard {
+	margin-top: 12px;
+	border-radius: 40px !important;
+}
+
+.copyRightCardContent {
+	padding: 12px !important;
+	text-align: center;
+	font-size: 11px;
+	display: flex;
+	justify-content: center;
+	color: #707070;
+}
