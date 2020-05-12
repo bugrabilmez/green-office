@@ -100,7 +100,10 @@ export default class Root extends React.Component {
 			if (!this.state.contest.isTimeUp && !this.state.contest.countDown) {
 				return (
 					<FrameGrid>
-						<div className="contestTitle">{this.state.contest.name}</div>
+						<div className="contestTitle">
+							<div><img src="/images/yesilYarisma.png" alt="Kale Yazılım A.Ş." /></div>
+							<div>{this.state.contest.name}</div>
+						</div>
 						<div className="contestInfo">{this.state.contest.description}</div>
 						<User />
 						<div className="contestTime">
@@ -116,7 +119,10 @@ export default class Root extends React.Component {
 				seconds += this.state.contest.timeRemainingSeconds;
 				return (
 					<FrameGrid>
-						<div className="contestTitle">{this.state.contest.name}</div>
+						<div className="contestTitle">
+							<div><img src="/images/yesilYarisma.png" alt="Kale Yazılım A.Ş." /></div>
+							<div>{this.state.contest.name}</div>
+						</div>
 						<div className="contestInfo">{this.state.contest.description}</div>
 						<User />
 						<div className="contestTime">
@@ -137,7 +143,10 @@ export default class Root extends React.Component {
 		} else if (!this.state.contest.isCompleted && this.state.contest.hasStarted && this.state.contest.status) {
 			return (
 				<FrameGrid>
-					<div className="contestTitle">{this.state.contest.name}</div>
+					<div className="contestTitle">
+						<div><img src="/images/yesilYarisma.png" alt="Kale Yazılım A.Ş." /></div>
+						<div>{this.state.contest.name}</div>
+					</div>
 					<div className="contestInfo">{this.state.contest.description}</div>
 					<div className="contestTime">
 						<div className="contestTimeTitle">Yarışma Başladı!</div>

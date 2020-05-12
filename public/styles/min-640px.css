@@ -3,10 +3,14 @@
 }
 
 .contestTitle {
-	font-size: 45px;
+	font-size: 42px;
 	font-weight: bold;
 	color: #32a45c;
 	text-align: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 
 .progressBarText {
@@ -37,25 +41,37 @@
 }
 
 .resultMadal {
-	background: url('/images/winMadal.png') bottom no-repeat;
-	background-size: 50%;
+	z-index: 0;
 	height: 100vh;
 }
 
 .resultListSide {
 	min-height: 100vh;
-	padding-top: 40vh;
+	padding-top: 10vh;
 	text-align: center;
+}
+
+.resultMain {
+	background-color: #fefefe;
+	width: 100%;
+	height: 100%;
+}
+
+.resultMainGrid {
+	background: url(/images/resultBgMin640.png) no-repeat center center fixed;
+    background-size: initial;
+	background-position: right;
+	min-height: 100vh;
 }
 
 .resultMainText {
   	overflow-x: hidden;
   	overflow-y: auto !important;
   	height: auto;
-  	max-height: calc(60vh - 170px);
+  	max-height: calc(90vh - 300px);
   	font-size: 32px;
 	font-weight: bold;
-	color: #fefefe;
+	color: #32a45c;
 }
 
 .resultMainText::-webkit-scrollbar-track,
