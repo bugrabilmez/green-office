@@ -18,9 +18,7 @@ export default class Result extends React.Component {
   }
 
   render() {
-    let mainText = this.state.winners.map((winner, i) => {
-      return <p key={i}>{winner}</p>;
-    });
+    let mainText = this.state.winners.join(', ');
 
     if (!this.state.isCalculated) {
       mainText = 'Kazanan listesi oluşturuluyor...';
@@ -34,11 +32,11 @@ export default class Result extends React.Component {
           container
           alignItems="center"
           justify="center"
-          style={{ minHeight: '100vh' }}>
+          className="resultMainGrid">
           <Grid item xs={12} sm={6} className="resultListSide">
-            <div><img src="/images/contestCompleted.png" className="img-responsive marginAuto" alt="Yarışma tamamlandı!" /></div>
+            <div><img src="/images/completedContestMin640.png" className="img-responsive marginAuto" alt="Yarışma tamamlandı!" /></div>
             <div className="resultMainText">
-              {mainText}
+              <p>{mainText}</p>
             </div>
           </Grid>
           <Grid item xs={12} sm={6} className={"resultMadal"}>

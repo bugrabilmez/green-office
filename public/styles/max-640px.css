@@ -7,6 +7,10 @@
 	font-weight: bold;
 	color: #32a45c;
 	text-align: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 
 .progressBarText {
@@ -37,25 +41,36 @@
 	text-align: center;
 }
 
-.resultMadal {
-	background: url('/images/winMadal.png') bottom no-repeat;
-	background-size: 50%;
+.resultMadal {	
+    background: url(/images/resultBgMax640.png) no-repeat;
+    background-size: cover;
+    background-position: top;
+    height: 40vh;
 }
 
 .resultListSide {
-	min-height: 100vh;
-	padding-top: 5vh;
+	height: 60vh;
 	text-align: center;
+}
+
+.resultMain {
+	background-color: #fefefe;
+	width: 100%;
+	height: 100%;
+}
+
+.resultMainGrid {
+	min-height: 100vh;
 }
 
 .resultMainText {
   	overflow-x: hidden;
   	overflow-y: auto !important;
   	height: auto;
-  	max-height: calc(95vh - 100px);
+  	max-height: calc(60vh - 300px);
   	font-size: 24px;
 	font-weight: bold;
-	color: #fefefe;
+	color: #32a45c;
 }
 
 .resultMainText::-webkit-scrollbar-track,
