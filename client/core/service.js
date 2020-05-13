@@ -1,11 +1,15 @@
 import axios from 'axios';
 
-const instance = axios.create({
+const instanceGetContest = axios.create({
   timeout: 2500
 });
 
+const instance = axios.create({
+  timeout: 10000
+});
+
 const _getContest = callback => {
-  instance.get('/getContest').then(response => {
+  instanceGetContest.get('/getContest').then(response => {
     let contest = response.data[0];
     contest.hasStarted = !!contest.isTimeUp;
     contest.status = true;

@@ -8,7 +8,8 @@ import FrameGrid from './contest/frameGrid';
 export default class Root extends React.Component {
 	constructor() {
 		super();
-		this.intervalId = 0;
+		this.intervalIdForContest = 0;
+		this.intervalIdForCountDown = 0;
 		this.isClearIntervalServer = false;
 		this.isStartIntervalCountDown = false;
 		this.state = {
@@ -35,31 +36,28 @@ export default class Root extends React.Component {
 	}
 
 	componentWillMount() {
-		Service.getContest(contest => {
-			this.setState({ contest: contest });
-		});
+		this.intervalIdForContest = setInterval(() => {
+			Service.getContest(contest => {
+				this.setState({ contest: contest });
+			});
+		}, 3000);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (prevState.contest.id !== this.state.contest.id) {
-			if (!this.state.contest.isCompleted && !this.state.contest.countDown) {
-				this.intervalId = setInterval(() => {
-					Service.getContest(contest => {
-						this.setState({ contest: contest });
-					});
-				}, 5000);
-			}
-		}
 
-		if ((this.state.contest.isCompleted || this.state.contest.countDown) && !this.isClearIntervalServer) {
-			clearInterval(this.intervalId);
-			this.intervalId = 0;
+		// yarışma tamamlandıysa veya başlamasına 5 sn'den az kaldıysa sorgulamayı durdur.
+		if (!this.isClearIntervalServer &&
+			(this.state.contest.isCompleted
+				|| (this.state.contest.countDown && this.state.contest.timeRemainingMinutes === 0 && this.state.contest.timeRemainingSeconds <= 5)
+			)) {
+			clearInterval(this.intervalIdForContest);
+			this.intervalIdForContest = 0;
 			this.isClearIntervalServer = true;
 		}
 
 		if (!this.state.contest.isCompleted && !this.state.contest.hasStarted && this.state.contest.countDown && !this.isStartIntervalCountDown) {
 			this.isStartIntervalCountDown = true;
-			this.intervalId = setInterval(() => {
+			this.intervalIdForCountDown = setInterval(() => {
 				let totalSecond = this.state.contest.timeRemainingMinutes * 60 + this.state.contest.timeRemainingSeconds;
 				totalSecond--;
 				const state = {
@@ -77,8 +75,8 @@ export default class Root extends React.Component {
 		}
 
 		if (!this.state.contest.isCompleted && this.state.contest.isTimeUp && this.isStartIntervalCountDown) {
-			clearInterval(this.intervalId);
-			this.intervalId = 0;
+			clearInterval(this.intervalIdForCountDown);
+			this.intervalIdForCountDown = 0;
 		}
 
 	}
