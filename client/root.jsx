@@ -29,7 +29,8 @@ export default class Root extends React.Component {
 				isCompleted: false,
 				hasStarted: false,
 				status: null
-			}
+			},
+			questions: []
 		};
 
 		this.finishingContest = this.finishingContest.bind(this);
@@ -44,6 +45,12 @@ export default class Root extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
+
+		if (prevState.contest.id !== this.state.contest.id) {
+			Service.getQuestions(this.state.contest.id, questions => {
+				this.setState({ questions: questions.data });
+			});
+		}
 
 		// yarışma tamamlandıysa veya başlamasına 5 sn'den az kaldıysa sorgulamayı durdur.
 		if (!this.isClearIntervalServer &&
@@ -134,7 +141,7 @@ export default class Root extends React.Component {
 			} else {
 				return (
 					<FrameGrid>
-						<Contest contest={this.state.contest} finishingContest={this.finishingContest}></Contest>
+						<Contest contest={this.state} finishingContest={this.finishingContest}></Contest>
 					</FrameGrid>
 				);
 			}
