@@ -1,4 +1,5 @@
 const momentTz = require('moment-timezone');
+const moment = require('moment');
 
 const calculateRemaining = startingDate => {
     const now = momentTz().tz('Europe/Istanbul');
@@ -30,6 +31,20 @@ const calculateRemaining = startingDate => {
 
 };
 
+const calculateNextQuestionRemaining = (startingDate, questionOrder) => {
+    const now = momentTz().tz('Europe/Istanbul');
+    const nextQuestionTime = moment(startingDate).add(parseInt(questionOrder, 'm'));
+    let timeRemainingSeconds = 20;
+
+    const timeRemaining = momentTz(nextQuestionTime - now).tz('Europe/Istanbul');
+    timeRemainingSeconds = parseInt(timeRemaining.format('ss'));
+
+    return timeRemainingSeconds;
+
+};
+
 module.exports = {
-    calculateRemaining: calculateRemaining
+    calculateRemaining: calculateRemaining,
+    calculateNextQuestionRemaining: calculateNextQuestionRemaining
+
 }

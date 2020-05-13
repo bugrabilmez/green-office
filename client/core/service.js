@@ -1,11 +1,15 @@
 import axios from 'axios';
 
-const instance = axios.create({
+const instanceGetContest = axios.create({
   timeout: 2500
 });
 
+const instance = axios.create({
+  timeout: 10000
+});
+
 const _getContest = callback => {
-  instance.get('/getContest').then(response => {
+  instanceGetContest.get('/getContest').then(response => {
     let contest = response.data[0];
     contest.hasStarted = !!contest.isTimeUp;
     contest.status = true;
@@ -25,18 +29,6 @@ const _getQuestions = (contestId, callback) => {
     });
 };
 
-const _getAnswers = (questionId, callback) => {
-  instance
-    .get('/getAnswers', {
-      params: {
-        questionId
-      }
-    })
-    .then(response => {
-      callback(response);
-    });
-};
-
 const _sendAnswer = (answerId, questionId, callback) => {
   instance
     .post('/sendAnswer', {
@@ -49,11 +41,26 @@ const _sendAnswer = (answerId, questionId, callback) => {
     });
 };
 
-const _getResult = (questionId, callback) => {
+const _getResult = (questionId, startingDate, questionOrder, callback) => {
   instance
     .get('/getResult', {
       params: {
-        questionId
+        questionId,
+        startingDate,
+        questionOrder
+      }
+    })
+    .then(response => {
+      callback(response);
+    });
+};
+
+const getNextQuestionTime = (startingDate, questionOrder, callback) => {
+  instance
+    .get('/getNextQuestionTime', {
+      params: {
+        startingDate,
+        questionOrder
       }
     })
     .then(response => {
@@ -84,9 +91,9 @@ const saveUsername = (username, callback) => {
 module.exports = {
   getContest: _getContest,
   getQuestions: _getQuestions,
-  getAnswers: _getAnswers,
   sendAnswer: _sendAnswer,
   getResult: _getResult,
   getContestResult: _getContestResult,
-  saveUsername
+  saveUsername,
+  getNextQuestionTime
 };

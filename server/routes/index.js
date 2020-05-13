@@ -38,20 +38,18 @@ index.get('/reset/:m', (req, res, next) => {
 });
 
 index.get('/getQuestions', (req, res, next) => {
-  return ormFactory.find(req.app.locals.db.EntQuestion, { contestId: req.query.contestId }).then(data => {
-    return res.json(data);
-  }).catch((err) => {
-    next(err);
-  });
-});
-
-index.get('/getAnswers', (req, res, next) => {
-  return ormFactory.find(req.app.locals.db.EntAnswer, { questionId: req.query.questionId }).then(data => {
-    return res.json(
-      data.map(x => {
-        return { id: x.id, answer: x.answer, questionId: x.questionId };
-      })
-    );
+  return ormFactory.find(req.app.locals.db.EntQuestion, { contestId: req.query.contestId }).then(questions => {
+    const questionIdList = questions.map(q => q.id);
+    const expressionAnswers = { questionId: { $in: questionIdList } };
+    return ormFactory.find(req.app.locals.db.EntAnswer, expressionAnswers).then(answers => {
+      questions.forEach(q => {
+        const answersList = answers.filter(a => a.questionId === q.id);
+        q.dataValues.answerList = answersList.map(x => {
+          return { id: x.id, answer: x.answer, questionId: x.questionId };
+        });
+      });
+      return res.json(questions);
+    });
   }).catch((err) => {
     next(err);
   });
@@ -84,7 +82,8 @@ index.get('/getResult', (req, res, next) => {
           id: answer.id,
           count: competitorAnswers.filter(x => x.answerId === answer.id).length,
           isTrue: answer.isTrue,
-          answerInfo: answer.answerInfo
+          answerInfo: answer.answerInfo,
+          timeRemainingSeconds: contestUtils.calculateNextQuestionRemaining(req.query.startingDate, req.query.questionOrder)
         });
       });
       return res.json(result);
@@ -94,6 +93,15 @@ index.get('/getResult', (req, res, next) => {
   }).catch((err) => {
     next(err);
   });
+});
+
+index.get('/getNextQuestionTime', (req, res, next) => {
+  try {
+    res.json({ timeRemainingSeconds: contestUtils.calculateNextQuestionRemaining(req.query.startingDate, req.query.questionOrder) });
+  }
+  catch (err) {
+    res.json({ timeRemainingSeconds: 30 });
+  }
 });
 
 index.get('/createContestResult', (req, res) => {

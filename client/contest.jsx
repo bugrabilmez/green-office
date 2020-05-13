@@ -9,7 +9,6 @@ export default class Contest extends React.Component {
   constructor() {
     super();
     this._setQuestion = this._setQuestion.bind(this);
-    this._setAnswers = this._setAnswers.bind(this);
     this._startCountDown = this._startCountDown.bind(this);
     this._clearCountDown = this._clearCountDown.bind(this);
     this._onAnswerClick = this._onAnswerClick.bind(this);
@@ -18,6 +17,8 @@ export default class Contest extends React.Component {
     this._nextQuestion = this._nextQuestion.bind(this);
     this.questions = [];
     this.intervalId = 0;
+    this.intervalIdForNextQuestion = 0;
+    this.startNextQuestionInterval = false;
     this.state = {
       order: 0,
       selectedAnswerId: 0,
@@ -36,7 +37,7 @@ export default class Contest extends React.Component {
   }
 
   _setQuestion() {
-    const question = this.questions.find(x => x.order === this.state.order + 1);
+    const question = this.props.contest.questions.find(x => x.order === this.state.order + 1);
     const state = {
       order: this.state.order + 1,
       question: question.question,
@@ -47,26 +48,14 @@ export default class Contest extends React.Component {
       isCompleted: false,
       showResult: false,
       nextQuestionSecond: 20,
-      result: []
+      result: [],
+      answers: question.answerList
     };
     this.setState(prevState => ({
       ...prevState,
       ...state
     }));
-    this._setAnswers(question.id);
-  }
-
-  _setAnswers(questionId) {
-    Service.getAnswers(questionId, data => {
-      const state = {
-        answers: data.data
-      };
-      this.setState(prevState => ({
-        ...prevState,
-        ...state
-      }));
-      this._startCountDown();
-    });
+    this._startCountDown();
   }
 
   _startCountDown() {
@@ -93,7 +82,7 @@ export default class Contest extends React.Component {
   _getResult() {
     if (this.state.result.length === 0 && this.state.isCompleted && !this.state.showResult) {
       setTimeout(() => {
-        Service.getResult(this.state.questionId, data => {
+        Service.getResult(this.state.questionId, this.props.contest.contest.startingDate, this.state.order, data => {
           const state = Object.assign({}, this.state);
           state.result = data.data;
           state.showResult = true;
@@ -101,27 +90,44 @@ export default class Contest extends React.Component {
           if (!selected || !selected.isTrue) {
             state.incorrectAnswer = true;
           }
-          if (this.state.order === this.questions.length) {
+          state.nextQuestionSecond = selected.timeRemainingSeconds;
+          this.startNextQuestionInterval = false;
+          if (this.state.order === this.props.contest.questions.length) {
             state.isFinished = true;
           }
           this.setState(state);
         });
-      }, 7000);
+      }, 10000);
     }
   }
 
   _nextQuestion() {
     if (this.state.showResult) {
-      if (this.state.nextQuestionSecond === 20) {
+      if (!this.startNextQuestionInterval) {
+        this.startNextQuestionInterval = true;
         this.intervalId = setInterval(() => {
           const state = Object.assign({}, this.state);
           state.nextQuestionSecond = state.nextQuestionSecond - 1;
           this.setState(state);
         }, 1000);
+
+        if (this.state.nextQuestionSecond > 5) {
+          this.intervalIdForNextQuestion = setInterval(() => {
+            Service.getNextQuestionTime(this.props.contest.contest.startingDate, this.state.order, (result) => {
+              this.setState({ nextQuestionSecond: result.data.timeRemainingSeconds });
+            });
+          }, 3000);
+        }
       }
+
+      if (this.state.nextQuestionSecond <= 5 && this.intervalIdForNextQuestion !== 0) {
+        clearInterval(this.intervalIdForNextQuestion);
+        this.intervalIdForNextQuestion = 0;
+      }
+
       if (this.state.nextQuestionSecond === 0) {
         this._clearCountDown();
-        if (this.state.order === this.questions.length) {
+        if (this.state.order === this.props.contest.questions.length) {
           this.props.finishingContest();
         } else {
           this._setQuestion();
@@ -140,13 +146,12 @@ export default class Contest extends React.Component {
   }
 
   componentWillMount() {
-    Service.getQuestions(this.props.contest.id, questions => {
-      this.questions = questions.data;
+    if (this.props.contest.questions && this.props.contest.questions.length > 0) {
       this._setQuestion();
-    });
+    }
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevState, prevProps) {
     if (this.state.second === 0 && prevState !== this.state) {
       this._setQuestionCompleted();
       this._getResult();
@@ -158,7 +163,7 @@ export default class Contest extends React.Component {
     return (
       <InsideGrid spacing={24}>
         <Grid item xs={12}>
-          <ProgressBar state={this.state} questionsLength={this.questions.length} />
+          <ProgressBar state={this.state} questionsLength={this.props.contest.questions.length} />
         </Grid>
         <Grid item xs={12}>
           <div className='question'>{this.state.question}</div>
