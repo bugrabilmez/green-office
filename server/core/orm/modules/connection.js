@@ -47,15 +47,15 @@ const _create = () => {
         dbInfo.database,
         dbInfo.username,
         dbInfo.password, {
-            host: dbInfo.host,
-            dialect: dbInfo.dialect,
-            pool: {
-                max: 5,
-                min: 0,
-                idle: 10000,
-            },
-            storage: path.join(process.cwd(), 'db', 'database.sqlite'),
-        });
+        host: dbInfo.host,
+        dialect: dbInfo.dialect,
+        pool: {
+            max: 100,
+            min: 0,
+            idle: 10000,
+        },
+        storage: path.join(process.cwd(), 'db', 'database.sqlite'),
+    });
 
     fs
         .readdirSync(dirname)
@@ -66,7 +66,7 @@ const _create = () => {
             if (file.indexOf('base') < 0 && file.indexOf('options') < 0) {
                 const model = sequelize['import'](path.join(dirname, file));
                 db[model.name] = model;
-            }            
+            }
         });
 
     Object.keys(db).forEach(modelName => {
@@ -78,7 +78,7 @@ const _create = () => {
     db.sequelize = sequelize;
     db.Sequelize = Sequelize;
 
-    return  db;
+    return db;
 }
 
 const _authenticate = (db) => {
