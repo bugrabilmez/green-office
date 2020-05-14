@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const instanceGetContest = axios.create({
+const instanceForTime = axios.create({
   timeout: 2500
 });
 
@@ -9,7 +9,7 @@ const instance = axios.create({
 });
 
 const _getContest = callback => {
-  instanceGetContest.get('/getContest').then(response => {
+  instanceForTime.get('/getContest').then(response => {
     let contest = response.data[0];
     contest.hasStarted = !!contest.isTimeUp;
     contest.status = true;
@@ -56,7 +56,7 @@ const _getResult = (questionId, startingDate, questionOrder, callback) => {
 };
 
 const getNextQuestionTime = (startingDate, questionOrder, callback) => {
-  instance
+  instanceForTime
     .get('/getNextQuestionTime', {
       params: {
         startingDate,
