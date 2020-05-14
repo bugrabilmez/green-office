@@ -93,11 +93,7 @@ body {
 	text-align: left;
 	padding-left: 24px;
 	cursor: pointer;
-}
-
-.answerButton.hover,
-.answerButton:hover {
-	background-color: #e4e4e4;
+	-webkit-tap-highlight-color: transparent;
 }
 
 .answerButton.focus,

@@ -41,6 +41,11 @@
 	text-align: center;
 }
 
+.answerButton.hover,
+.answerButton:hover {
+	background-color: none;
+}
+
 .resultMadal {	
     height: 0vh;
 }

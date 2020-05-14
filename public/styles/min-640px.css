@@ -40,6 +40,11 @@
 	text-align: center;
 }
 
+.answerButton.hover,
+.answerButton:hover {
+	background-color: #e4e4e4;
+}
+
 .resultMadal {
 	z-index: 0;
 	height: 100vh;

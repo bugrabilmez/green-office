@@ -104,7 +104,7 @@ index.get('/getNextQuestionTime', (req, res, next) => {
   }
 });
 
-index.get('/createContestResult', (req, res) => {
+index.get('/createContestResult', (req, res, next) => {
 
   Promise
     .all([ormFactory.findOne(req.app.locals.db.EntContest, { id: req.query.contestId }), ormFactory.find(req.app.locals.db.EntQuestion, { contestId: req.query.contestId })])
