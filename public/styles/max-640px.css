@@ -41,16 +41,22 @@
 	text-align: center;
 }
 
+.answerButton.hover,
+.answerButton:hover {
+	background-color: none;
+}
+
 .resultMadal {	
-    background: url(/images/resultBgMax640.png) no-repeat;
-    background-size: cover;
-    background-position: top;
-    height: 40vh;
+    height: 0vh;
 }
 
 .resultListSide {
-	height: 60vh;
+	height: 100vh;
 	text-align: center;
+    background: url(/images/resultBgMax640.png) no-repeat;
+    background-size: 120%;
+    background-position: bottom;
+    background-position-y: 120%;
 }
 
 .resultMain {
@@ -67,10 +73,13 @@
   	overflow-x: hidden;
   	overflow-y: auto !important;
   	height: auto;
-  	max-height: calc(60vh - 300px);
+  	max-height: calc(100vh - 300px);
   	font-size: 24px;
 	font-weight: bold;
-	color: #32a45c;
+	color:  #000000;
+	background-color:rgba(255, 255, 255, 0.5);
+	border-radius: 20px;
+	margin: 5px;
 }
 
 .resultMainText::-webkit-scrollbar-track,
