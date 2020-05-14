@@ -71,7 +71,10 @@
   	max-height: calc(90vh - 300px);
   	font-size: 32px;
 	font-weight: bold;
-	color: #32a45c;
+	color: #000000;
+	background-color:rgba(255, 255, 255, 0.5);
+	border-radius: 20px;
+	margin: 5px;
 }
 
 .resultMainText::-webkit-scrollbar-track,
