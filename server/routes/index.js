@@ -4,6 +4,7 @@ const ormFactory = require('../core/orm/factory').instance();
 const { chain } = require('lodash');
 const moment = require('moment');
 const contestUtils = require('../utils/contest');
+const sequelize = require('sequelize');
 
 index.get('/', (req, res) => {
   res.render('index');
@@ -140,13 +141,17 @@ index.get('/createContestResult', (req, res, next) => {
           });
 
           contest.isCompleted = true;
-          return contest.save().then(result => {
+          const transaction = contest.sequelize.transaction();
+          transaction.then(t => {
+            return contest.save({ lock: t.LOCK.UPDATE });
+          }).then(result => {
             return res.json({
               winners,
               result
-            });
+            })
+          }).catch(err => {
+            next(err);
           });
-
         })
         .catch(err => next(err));
     })
