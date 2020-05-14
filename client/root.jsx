@@ -46,12 +46,6 @@ export default class Root extends React.Component {
 
 	componentDidUpdate(prevProps, prevState) {
 
-		if (prevState.contest.id !== this.state.contest.id) {
-			Service.getQuestions(this.state.contest.id, questions => {
-				this.setState({ questions: questions.data });
-			});
-		}
-
 		// yarışma tamamlandıysa veya başlamasına 5 sn'den az kaldıysa sorgulamayı durdur.
 		if (!this.isClearIntervalServer &&
 			(this.state.contest.isCompleted
@@ -63,6 +57,11 @@ export default class Root extends React.Component {
 		}
 
 		if (!this.state.contest.isCompleted && !this.state.contest.hasStarted && this.state.contest.countDown && !this.isStartIntervalCountDown) {
+
+			Service.getQuestions(this.state.contest.id, questions => {
+				this.setState({ questions: questions.data });
+			});
+
 			this.isStartIntervalCountDown = true;
 			this.intervalIdForCountDown = setInterval(() => {
 				let totalSecond = this.state.contest.timeRemainingMinutes * 60 + this.state.contest.timeRemainingSeconds;
