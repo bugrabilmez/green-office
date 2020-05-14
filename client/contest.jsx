@@ -90,7 +90,7 @@ export default class Contest extends React.Component {
           if (!selected || !selected.isTrue) {
             state.incorrectAnswer = true;
           }
-          state.nextQuestionSecond = selected.timeRemainingSeconds;
+          state.nextQuestionSecond = selected && selected.timeRemainingSeconds ? selected.timeRemainingSeconds : 40;
           this.startNextQuestionInterval = false;
           if (this.state.order === this.props.contest.questions.length) {
             state.isFinished = true;
